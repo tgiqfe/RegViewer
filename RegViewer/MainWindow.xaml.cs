@@ -24,9 +24,11 @@ namespace RegViewer
         {
             if (e.NewValue is KeyItem selectedKeyItem)
             {
-                selectedKeyItem.LoadSubKeys();
-                //selectedKeyItem.IsExpanded = !selectedKeyItem.IsExpanded;
-                
+                AddressBar.Text = selectedKeyItem.Path;
+                foreach (var item in selectedKeyItem.SubKeys)
+                {
+                    item.LoadSubKeys();
+                }
             }
         }
 
@@ -36,6 +38,17 @@ namespace RegViewer
             {
                 TreeScrollViewer.ScrollToVerticalOffset(TreeScrollViewer.VerticalOffset - e.Delta / 3.0);
                 e.Handled = true;
+            }
+        }
+
+        private void TreeViewItem_Expanded(object sender, RoutedEventArgs e)
+        {
+            if (sender is TreeViewItem treeViewItem && treeViewItem.DataContext is KeyItem expandingKeyItem)
+            {
+                foreach (var item in expandingKeyItem.SubKeys)
+                {
+                    item.LoadSubKeys();
+                }
             }
         }
     }

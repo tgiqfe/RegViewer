@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
+using System.Security;
 using System.Text;
 using Microsoft.Win32;
 
@@ -12,9 +13,19 @@ namespace RegViewer
     {
         public string Name { get; set; }
 
+        public string Path
+        {
+            get
+            {
+                return string.IsNullOrEmpty(this.RelatedPath) ?
+                    this.RootKey.Name :
+                    $"{this.RootKey.Name}\\{this.RelatedPath}";
+            }
+        }
+
         public RegistryKey RootKey { get; set; }
 
-        public string Path { get; set; }
+        public string RelatedPath { get; set; }
 
         private ObservableCollection<KeyItem> _subKeys = null;
         public ObservableCollection<KeyItem> SubKeys
@@ -50,9 +61,13 @@ namespace RegViewer
         {
             this.RootKey = rootKey;
             this.Name = rootKey.Name;
-            this.Path = "";
+            this.RelatedPath = "";
 
             LoadSubKeys();
+            foreach (var item in this.SubKeys)
+            {
+                item.LoadSubKeys();
+            }
         }
 
         public void LoadSubKeys()
@@ -60,20 +75,27 @@ namespace RegViewer
             if (SubKeys == null)
             {
                 this.SubKeys = new ObservableCollection<KeyItem>();
-                using (var regKey = this.RootKey.OpenSubKey(this.Path))
+                try
                 {
-                    if (regKey != null)
+                    using (var regKey = this.RootKey.OpenSubKey(this.RelatedPath))
                     {
-                        foreach (var subKeyName in regKey.GetSubKeyNames())
+                        if (regKey != null)
                         {
-                            SubKeys.Add(new KeyItem()
+                            foreach (var subKeyName in regKey.GetSubKeyNames())
                             {
-                                Name = subKeyName,
-                                Path = this.Path == "" ? subKeyName : $"{this.Path}\\{subKeyName}",
-                                RootKey = this.RootKey
-                            });
+                                SubKeys.Add(new KeyItem()
+                                {
+                                    Name = subKeyName,
+                                    RelatedPath = this.RelatedPath == "" ? subKeyName : $"{this.RelatedPath}\\{subKeyName}",
+                                    RootKey = this.RootKey
+                                });
+                            }
                         }
                     }
+                }
+                catch (SecurityException e)
+                {
+                    Console.WriteLine($"SecurityException: {e.Message}");
                 }
             }
         }

@@ -1,4 +1,5 @@
-﻿using System.Configuration;
+﻿using RegViewer.Lib.RegistryCodes;
+using System.Configuration;
 using System.Data;
 using System.Windows;
 
@@ -16,7 +17,7 @@ namespace RegViewer
 
         private void Application_Exit(object sender, ExitEventArgs e)
         {
-
+            Item.BindingParam.Setting.Save();
         }
     }
 

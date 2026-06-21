@@ -5,56 +5,77 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:RegViewer"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        Title="MainWindow"
+        Left="{Binding Setting.Left, Mode=TwoWay}"
+        Top="{Binding Setting.Top, Mode=TwoWay}"
+        Height="{Binding Setting.Height, Mode=TwoWay}"
+        Width="{Binding Setting.Width, Mode=TwoWay}">
+
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="Auto" />
             <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
+            <RowDefinition Height="30" />
             <RowDefinition Height="*" />
             <RowDefinition Height="30" />
         </Grid.RowDefinitions>
-        <Border Grid.Row="0" Grid.Column="0" BorderBrush="Gray" BorderThickness="1">
+
+        <Border Grid.Row="0" Grid.ColumnSpan="2" BorderBrush="Gray" BorderThickness="1">
+            <TextBox Name="AddressBar"
+                     Text=""
+                     VerticalContentAlignment="Center"
+                     FontSize="12" />
+        </Border>
+
+        <Border Grid.Row="1" Grid.Column="0" BorderBrush="Gray" BorderThickness="1">
             <ScrollViewer Name="TreeScrollViewer" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
                 <StackPanel Orientation="Vertical">
-                    <TreeView Name="TreeView1" ItemsSource="{Binding Keys1}" BorderThickness="0" SelectedItemChanged="TreeView_SelectedItemChanged"
+                    <TreeView Name="TreeView1" ItemsSource="{Binding Keys1}" BorderThickness="0"
+                              SelectedItemChanged="TreeView_SelectedItemChanged"
                               ScrollViewer.VerticalScrollBarVisibility="Disabled"
                               ScrollViewer.HorizontalScrollBarVisibility="Disabled"
                               PreviewMouseWheel="TreeView_PreviewMouseWheel">
                         <TreeView.ItemContainerStyle>
                             <Style TargetType="TreeViewItem">
                                 <Setter Property="IsExpanded" Value="{Binding IsExpanded, Mode=TwoWay}" />
+                                <EventSetter Event="Expanded" Handler="TreeViewItem_Expanded" />
                             </Style>
                         </TreeView.ItemContainerStyle>
                         <TreeView.ItemTemplate>
                             <HierarchicalDataTemplate DataType="{x:Type local:KeyItem}"
                                                       ItemsSource="{Binding SubKeys}">
-                                <TextBlock Text="{Binding Name}" FontWeight="Bold" Margin="0,0,5,0" />
+                                <TextBlock Text="{Binding Name}" FontWeight="Bold" Margin="0,0,5,0"
+                                           FontSize="12"/>
                             </HierarchicalDataTemplate>
                         </TreeView.ItemTemplate>
                     </TreeView>
 
-                    <TreeView Name="TreeView2" ItemsSource="{Binding Keys2}" BorderThickness="0" SelectedItemChanged="TreeView_SelectedItemChanged"
+                    <TreeView Name="TreeView2" ItemsSource="{Binding Keys2}" BorderThickness="0"
+                              SelectedItemChanged="TreeView_SelectedItemChanged"
                               ScrollViewer.VerticalScrollBarVisibility="Disabled"
                               ScrollViewer.HorizontalScrollBarVisibility="Disabled"
                               PreviewMouseWheel="TreeView_PreviewMouseWheel">
                         <TreeView.ItemContainerStyle>
                             <Style TargetType="TreeViewItem">
                                 <Setter Property="IsExpanded" Value="{Binding IsExpanded, Mode=TwoWay}" />
+                                <EventSetter Event="Expanded" Handler="TreeViewItem_Expanded" />
                             </Style>
                         </TreeView.ItemContainerStyle>
                         <TreeView.ItemTemplate>
                             <HierarchicalDataTemplate DataType="{x:Type local:KeyItem}"
                                                       ItemsSource="{Binding SubKeys}">
-                                <TextBlock Text="{Binding Name}" FontWeight="Bold" Margin="0,0,5,0" />
+                                <TextBlock Text="{Binding Name}" FontWeight="Bold" Margin="0,0,5,0"
+                                           FontSize="12"/>
                             </HierarchicalDataTemplate>
                         </TreeView.ItemTemplate>
                     </TreeView>
                 </StackPanel>
             </ScrollViewer>
         </Border>
-        <Border Grid.Row="0" Grid.Column="1" BorderBrush="Gray" BorderThickness="1">
+        
+        <Border Grid.Row="1" Grid.Column="1" BorderBrush="Gray" BorderThickness="1">
             <StackPanel Orientation="Vertical">
                 <Label Content="aaaa" />
                 <Label Content="aaaa" />
@@ -63,6 +84,6 @@
             </StackPanel>
         </Border>
         
-        <Label Grid.Row="1" Grid.Column="0" Content="Status: Ready" />
+        <Label Grid.Row="2" Grid.Column="0" Content="Status: Ready" />
     </Grid>
 </Window>

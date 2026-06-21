@@ -7,11 +7,14 @@ namespace RegViewer
 {
     internal class BindingParam
     {
+        public Setting Setting { get; set; }
         public ObservableCollection<KeyItem> Keys1 { get; set; }
         public ObservableCollection<KeyItem> Keys2 { get; set; }
 
+
         public BindingParam()
         {
+            Setting = Setting.Load();
             Keys1 = new();
             Keys2 = new();
         }
