@@ -27,6 +27,8 @@ namespace RegViewer
 
         public string RelatedPath { get; set; }
 
+        public KeyItem Parent { get; set; }
+
         private ObservableCollection<KeyItem> _subKeys = null;
         public ObservableCollection<KeyItem> SubKeys
         {
@@ -87,7 +89,8 @@ namespace RegViewer
                                 {
                                     Name = subKeyName,
                                     RelatedPath = this.RelatedPath == "" ? subKeyName : $"{this.RelatedPath}\\{subKeyName}",
-                                    RootKey = this.RootKey
+                                    RootKey = this.RootKey,
+                                    Parent = this,
                                 });
                             }
                         }

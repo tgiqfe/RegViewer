@@ -62,11 +62,14 @@ namespace RegViewer
 
         private void TreeView_PreviewKeyDown(object sender, KeyEventArgs e)
         {
-            if (sender is not TreeView treeView)
-                return;
+            if (sender is not TreeView treeView) return;
 
             // 文字キーのみを処理
-            if (e.Key >= Key.A && e.Key <= Key.Z)
+            if ((e.Key >= Key.A && e.Key <= Key.Z) ||
+                (e.Key >= Key.D0 && e.Key <= Key.D9) ||
+                e.Key == Key.Space ||
+                e.Key == Key.OemPeriod ||
+                e.Key == Key.OemComma)
             {
                 var currentTime = DateTime.Now;
 
@@ -83,16 +86,35 @@ namespace RegViewer
                 var currentItem = treeView.SelectedItem as KeyItem;
                 KeyItem foundItem = null;
 
+                if (currentItem.Parent == null)
+                {
+                    foundItem = SearchInTreeView(treeView);
+                }
+                else
+                {
+                    var index = currentItem.Parent.SubKeys.IndexOf(currentItem);
+                    foreach (var item in currentItem.Parent.SubKeys.Skip(index))
+                    {
+                        foundItem = SearchInKeyItem(item);
+                        if (foundItem != null)
+                        {
+                            break;
+                        }
+                    }
+                }
+
+
+
                 if (currentItem != null && currentItem.SubKeys != null)
                 {
                     // 現在選択されている項目の兄弟要素から検索
-                    foundItem = SearchInSiblings(treeView, currentItem);
+                    //foundItem = SearchInSiblings(treeView, currentItem);
                 }
 
                 // 兄弟要素で見つからなければ、ツリー全体から検索
                 if (foundItem == null)
                 {
-                    foundItem = SearchInTreeView(treeView);
+                    //foundItem = SearchInTreeView(treeView);
                 }
 
                 // 見つかった項目を選択
@@ -104,6 +126,8 @@ namespace RegViewer
                 e.Handled = true;
             }
         }
+
+
 
         private KeyItem SearchInSiblings(TreeView treeView, KeyItem currentItem)
         {
