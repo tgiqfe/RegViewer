@@ -34,6 +34,7 @@
                 <StackPanel Orientation="Vertical">
                     <TreeView Name="TreeView1" ItemsSource="{Binding Keys1}" BorderThickness="0"
                               SelectedItemChanged="TreeView_SelectedItemChanged"
+                              PreviewKeyDown="TreeView_PreviewKeyDown"
                               ScrollViewer.VerticalScrollBarVisibility="Disabled"
                               ScrollViewer.HorizontalScrollBarVisibility="Disabled"
                               PreviewMouseWheel="TreeView_PreviewMouseWheel">
@@ -54,6 +55,7 @@
 
                     <TreeView Name="TreeView2" ItemsSource="{Binding Keys2}" BorderThickness="0"
                               SelectedItemChanged="TreeView_SelectedItemChanged"
+                              PreviewKeyDown="TreeView_PreviewKeyDown"
                               ScrollViewer.VerticalScrollBarVisibility="Disabled"
                               ScrollViewer.HorizontalScrollBarVisibility="Disabled"
                               PreviewMouseWheel="TreeView_PreviewMouseWheel">
