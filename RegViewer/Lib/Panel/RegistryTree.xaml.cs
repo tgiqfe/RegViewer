@@ -32,10 +32,7 @@ namespace RegViewer.Lib.Panel
             {
                 _selectedKeyItem = selectedKeyItem;
                 Item.BindingParam.AddressBar.Text = selectedKeyItem.Path;
-                foreach (var item in selectedKeyItem.SubKeys)
-                {
-                    item.LoadSubKeys();
-                }
+                selectedKeyItem.LoadSubKeys();
             }
         }
 
@@ -81,7 +78,7 @@ namespace RegViewer.Lib.Panel
             }
         }
 
-        private void TreeViewItem_Expanded(object sender, RoutedEventArgs e)
+        private async void TreeViewItem_Expanded(object sender, RoutedEventArgs e)
         {
             // 実際に展開されたアイテムのみを処理（バブリングを防ぐ/親アイテムの展開イベントを無視）
             if (e.OriginalSource == sender &&
@@ -91,6 +88,21 @@ namespace RegViewer.Lib.Panel
                 if (!treeViewItem.IsSelected)
                 {
                     treeViewItem.IsSelected = true;
+                }
+
+                // 展開時に配下のサブキーを並列で先読みロード
+                if (expandingKeyItem.SubKeys != null && expandingKeyItem.SubKeys.Count > 0)
+                {
+                    await Task.Run(() =>
+                    {
+                        Parallel.ForEach(expandingKeyItem.SubKeys, new ParallelOptions
+                        {
+                            MaxDegreeOfParallelism = Environment.ProcessorCount
+                        }, item =>
+                        {
+                            item.LoadSubKeys();
+                        });
+                    });
                 }
             }
         }

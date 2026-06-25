@@ -8,6 +8,8 @@ namespace RegViewer.Lib
 {
     public class KeyItem : INotifyPropertyChanged
     {
+        #region Item properties
+
         public string Name { get; set; }
 
         public string Path
@@ -54,8 +56,18 @@ namespace RegViewer.Lib
             }
         }
 
+        #endregion
+        #region Constructor
+
+        /// <summary>
+        /// Initializes a new instance of the KeyItem class.
+        /// </summary>
         public KeyItem() { }
 
+        /// <summary>
+        /// Initializes a new instance of the KeyItem class with the specified root registry key.
+        /// </summary>
+        /// <param name="rootKey"></param>
         public KeyItem(RegistryKey rootKey)
         {
             this.RootKey = rootKey;
@@ -69,20 +81,24 @@ namespace RegViewer.Lib
             }
         }
 
+        #endregion
+
         public void LoadSubKeys()
         {
             if (SubKeys == null)
             {
-                this.SubKeys = new ObservableCollection<KeyItem>();
                 try
                 {
                     using (var regKey = this.RootKey.OpenSubKey(this.RelatedPath))
                     {
                         if (regKey != null)
                         {
-                            foreach (var subKeyName in regKey.GetSubKeyNames())
+                            var subKeyNames = regKey.GetSubKeyNames();
+                            var subKeyList = new List<KeyItem>(subKeyNames.Length);
+
+                            foreach (var subKeyName in subKeyNames)
                             {
-                                SubKeys.Add(new KeyItem()
+                                subKeyList.Add(new KeyItem()
                                 {
                                     Name = subKeyName,
                                     RelatedPath = this.RelatedPath == "" ? subKeyName : $"{this.RelatedPath}\\{subKeyName}",
@@ -90,12 +106,18 @@ namespace RegViewer.Lib
                                     Parent = this,
                                 });
                             }
+                            this.SubKeys = new ObservableCollection<KeyItem>(subKeyList);
+                        }
+                        else
+                        {
+                            this.SubKeys = new ObservableCollection<KeyItem>();
                         }
                     }
                 }
                 catch (SecurityException e)
                 {
                     Console.WriteLine($"SecurityException: {e.Message}");
+                    this.SubKeys = new ObservableCollection<KeyItem>();
                 }
             }
         }
