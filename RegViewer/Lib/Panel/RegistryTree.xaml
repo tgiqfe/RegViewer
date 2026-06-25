@@ -5,13 +5,13 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:RegViewer.Lib.Panel"
              xmlns:lib="clr-namespace:RegViewer.Lib"
-             mc:Ignorable="d"
-             x:Name="Root">
+             mc:Ignorable="d">
     <Grid>
         <ScrollViewer Name="TreeScrollViewer"
                       VerticalScrollBarVisibility="Auto"
                       HorizontalScrollBarVisibility="Auto">
-            <TreeView ItemsSource="{Binding RootKeys}"
+            <TreeView Name="TreeView"
+                      ItemsSource="{Binding RootKeys}"
                       BorderThickness="0"
                       SelectedItemChanged="TreeView_SelectedItemChanged"
                       PreviewKeyDown="TreeView_PreviewKeyDown"

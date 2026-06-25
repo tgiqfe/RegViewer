@@ -24,6 +24,7 @@ namespace RegViewer
             this.DataContext = Item.BindingParam;
         }
 
+        /*
         private void TreeView_SelectedItemChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
         {
             if (e.NewValue is KeyItem selectedKeyItem)
@@ -35,6 +36,7 @@ namespace RegViewer
                 }
             }
         }
+        */
 
         /*
         private void TreeView_PreviewMouseWheel(object sender, MouseWheelEventArgs e)

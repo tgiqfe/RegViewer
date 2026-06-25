@@ -1,16 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Text;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace RegViewer.Lib.Panel
 {
@@ -28,11 +18,16 @@ namespace RegViewer.Lib.Panel
             InitializeComponent();
         }
 
-
-
         private void TreeView_SelectedItemChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
         {
-    
+            if (e.NewValue is KeyItem selectedKeyItem)
+            {
+                //AddressBar.Text = selectedKeyItem.Path;
+                foreach (var item in selectedKeyItem.SubKeys)
+                {
+                    item.LoadSubKeys();
+                }
+            }
         }
 
         private void TreeView_PreviewMouseWheel(object sender, MouseWheelEventArgs e)
@@ -46,11 +41,14 @@ namespace RegViewer.Lib.Panel
 
         private void TreeViewItem_Expanded(object sender, RoutedEventArgs e)
         {
-            if (sender is TreeViewItem treeViewItem && treeViewItem.DataContext is KeyItem expandingKeyItem)
+            // 実際に展開されたアイテムのみを処理（バブリングを防ぐ/親アイテムの展開イベントを無視）
+            if (e.OriginalSource == sender && 
+                sender is TreeViewItem treeViewItem && 
+                treeViewItem.DataContext is KeyItem expandingKeyItem)
             {
-                foreach (var item in expandingKeyItem.SubKeys)
+                if (!treeViewItem.IsSelected)
                 {
-                    item.LoadSubKeys();
+                    treeViewItem.IsSelected = true;
                 }
             }
         }
@@ -77,7 +75,7 @@ namespace RegViewer.Lib.Panel
                 }
 
                 _lastKeyPressTime = currentTime;
-                _searchString += e.Key.ToString().ToLower();
+                _searchString += GetCharFromKey(e.Key);
 
                 // 現在表示されている項目から検索を開始
                 var currentItem = treeView.SelectedItem as KeyItem;
@@ -110,10 +108,35 @@ namespace RegViewer.Lib.Panel
             }
         }
 
+        private char GetCharFromKey(Key key)
+        {
+            // キーコードを文字に変換する
+            if (key >= Key.A && key <= Key.Z)
+            {
+                return (char)('a' + (key - Key.A));
+            }
+            else if (key >= Key.D0 && key <= Key.D9)
+            {
+                return (char)('0' + (key - Key.D0));
+            }
+            else if (key == Key.Space)
+            {
+                return ' ';
+            }
+            else if (key == Key.OemPeriod)
+            {
+                return '.';
+            }
+            else if (key == Key.OemComma)
+            {
+                return ',';
+            }
+            return '\0'; // 無効なキーの場合はヌル文字を返す
+        }
+
         private KeyItem SearchInTreeView(TreeView treeView)
         {
-            if (treeView.ItemsSource == null)
-                return null;
+            if (treeView.ItemsSource == null) return null;
 
             foreach (KeyItem rootItem in treeView.ItemsSource)
             {
