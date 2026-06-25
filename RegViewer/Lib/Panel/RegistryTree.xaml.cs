@@ -1,52 +1,55 @@
-﻿using Microsoft.Win32;
-using RegViewer.Lib;
-using System;
-using System.Linq;
+﻿using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Text;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Data;
+using System.Windows.Documents;
 using System.Windows.Input;
+using System.Windows.Media;
+using System.Windows.Media.Imaging;
+using System.Windows.Navigation;
+using System.Windows.Shapes;
 
-namespace RegViewer
+namespace RegViewer.Lib.Panel
 {
     /// <summary>
-    /// Interaction logic for MainWindow.xaml
+    /// RegistryTree.xaml の相互作用ロジック
     /// </summary>
-    public partial class MainWindow : Window
+    public partial class RegistryTree : UserControl
     {
         private string _searchString = "";
         private DateTime _lastKeyPressTime = DateTime.MinValue;
         private const int SearchTimeoutMs = 1000;
 
-        public MainWindow()
+        public static readonly DependencyProperty KeyItemsProperty =
+            DependencyProperty.Register(
+                nameof(KeyItems),
+                typeof(ObservableCollection<KeyItem>),
+                typeof(RegistryTree),
+                new PropertyMetadata(null));
+
+        public ObservableCollection<KeyItem> KeyItems
+        {
+            get => (ObservableCollection<KeyItem>)GetValue(KeyItemsProperty);
+            set => SetValue(KeyItemsProperty, value);
+        }
+
+        public RegistryTree()
         {
             InitializeComponent();
-
-            this.DataContext = Item.BindingParam;
-
-
-
-            
         }
+
+
 
         private void TreeView_SelectedItemChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
         {
-            if (e.NewValue is KeyItem selectedKeyItem)
-            {
-                AddressBar.Text = selectedKeyItem.Path;
-                foreach (var item in selectedKeyItem.SubKeys)
-                {
-                    item.LoadSubKeys();
-                }
-            }
+    
         }
 
         private void TreeView_PreviewMouseWheel(object sender, MouseWheelEventArgs e)
         {
-            if (TreeScrollViewer != null)
-            {
-                TreeScrollViewer.ScrollToVerticalOffset(TreeScrollViewer.VerticalOffset - e.Delta / 3.0);
-                e.Handled = true;
-            }
         }
 
         private void TreeViewItem_Expanded(object sender, RoutedEventArgs e)

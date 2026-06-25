@@ -7,9 +7,9 @@ using System.Security;
 using System.Text;
 using Microsoft.Win32;
 
-namespace RegViewer
+namespace RegViewer.Lib
 {
-    internal class KeyItem : INotifyPropertyChanged
+    public class KeyItem : INotifyPropertyChanged
     {
         public string Name { get; set; }
 
