@@ -14,11 +14,15 @@ namespace RegViewer.Lib.Panel
         private const int SearchTimeoutMs = 1000;
 
         private KeyItem _selectedKeyItem = null;
+        private readonly List<KeyItem> _selectedItems = new List<KeyItem>();
+        private KeyItem _lastSelectedItem = null;
 
         public RegistryTree()
         {
             InitializeComponent();
         }
+
+        public IReadOnlyList<KeyItem> SelectedItems => _selectedItems.AsReadOnly();
 
         /// <summary>
         /// TreeViewの選択が変更されたときに呼び出されるイベントハンドラー
@@ -33,12 +37,23 @@ namespace RegViewer.Lib.Panel
                 _selectedKeyItem = selectedKeyItem;
                 Item.BindingParam.AddressBar.Text = selectedKeyItem.Path;
                 selectedKeyItem.LoadSubKeys();
+
+                // 通常のTreeView選択が変更された場合、単一選択に更新
+                // ただし、既に複数選択がある場合（Ctrl/Shift操作中）はスキップ
+                if (_selectedItems.Count <= 1)
+                {
+                    ClearSelection();
+                    _selectedItems.Add(selectedKeyItem);
+                    selectedKeyItem.IsSelected = true;
+                    _lastSelectedItem = selectedKeyItem;
+                }
             }
         }
 
         /// <summary>
         /// TreeViewのPreviewMouseDownイベントハンドラー
         /// マウスのホイール上下でスクロールするために、TreeViewItem以外の部分をクリックした場合に選択を解除しないようにする
+        /// 複数選択機能: Ctrl/Shiftキーとの組み合わせで複数選択を実現
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
@@ -48,10 +63,125 @@ namespace RegViewer.Lib.Panel
             if (clickedElement != null)
             {
                 var treeViewItem = FindParent<TreeViewItem>(clickedElement);
-                if (treeViewItem == null && _selectedKeyItem != null)
+                if (treeViewItem != null && treeViewItem.DataContext is KeyItem clickedItem)
+                {
+                    // 展開トグル（左側の三角形）をクリックした場合はスキップ
+                    if (IsClickOnToggleButton(e.OriginalSource as FrameworkElement))
+                    {
+                        return;
+                    }
+
+                    bool isCtrlPressed = Keyboard.Modifiers.HasFlag(ModifierKeys.Control);
+                    bool isShiftPressed = Keyboard.Modifiers.HasFlag(ModifierKeys.Shift);
+
+                    if (isCtrlPressed)
+                    {
+                        // Ctrl: トグル選択
+                        if (_selectedItems.Contains(clickedItem))
+                        {
+                            _selectedItems.Remove(clickedItem);
+                            clickedItem.IsSelected = false;
+                        }
+                        else
+                        {
+                            _selectedItems.Add(clickedItem);
+                            clickedItem.IsSelected = true;
+                        }
+                        _lastSelectedItem = clickedItem;
+                        e.Handled = true;
+                    }
+                    else if (isShiftPressed && _lastSelectedItem != null)
+                    {
+                        // Shift: 範囲選択
+                        ClearSelection();
+                        SelectRange(_lastSelectedItem, clickedItem);
+                        e.Handled = true;
+                    }
+                    else
+                    {
+                        // 通常クリック: 単一選択
+                        ClearSelection();
+                        _selectedItems.Add(clickedItem);
+                        clickedItem.IsSelected = true;
+                        _lastSelectedItem = clickedItem;
+                        // 通常クリックの場合はTreeViewの標準動作を残すため、e.Handledは設定しない
+                    }
+                }
+                else if (treeViewItem == null && _selectedKeyItem != null)
                 {
                     SelectTreeViewItem(TreeView, _selectedKeyItem);
                     e.Handled = true;
+                }
+            }
+        }
+
+        private bool IsClickOnToggleButton(FrameworkElement element)
+        {
+            // 展開トグルボタンまたはその子要素をクリックしたかチェック
+            while (element != null)
+            {
+                if (element is System.Windows.Controls.Primitives.ToggleButton)
+                {
+                    return true;
+                }
+                element = System.Windows.Media.VisualTreeHelper.GetParent(element) as FrameworkElement;
+            }
+            return false;
+        }
+
+        private void ClearSelection()
+        {
+            foreach (var item in _selectedItems)
+            {
+                item.IsSelected = false;
+            }
+            _selectedItems.Clear();
+        }
+
+        private void SelectRange(KeyItem start, KeyItem end)
+        {
+            var allItems = GetAllVisibleItems(TreeView);
+            int startIndex = allItems.IndexOf(start);
+            int endIndex = allItems.IndexOf(end);
+
+            if (startIndex != -1 && endIndex != -1)
+            {
+                int minIndex = Math.Min(startIndex, endIndex);
+                int maxIndex = Math.Max(startIndex, endIndex);
+
+                for (int i = minIndex; i <= maxIndex; i++)
+                {
+                    var item = allItems[i];
+                    if (!_selectedItems.Contains(item))
+                    {
+                        _selectedItems.Add(item);
+                        item.IsSelected = true;
+                    }
+                }
+            }
+        }
+
+        private List<KeyItem> GetAllVisibleItems(TreeView treeView)
+        {
+            var result = new List<KeyItem>();
+            if (treeView.ItemsSource != null)
+            {
+                foreach (KeyItem rootItem in treeView.ItemsSource)
+                {
+                    AddVisibleItems(rootItem, result);
+                }
+            }
+            return result;
+        }
+
+        private void AddVisibleItems(KeyItem item, List<KeyItem> result)
+        {
+            result.Add(item);
+            if (item.IsExpanded && item.SubKeys != null)
+            {
+                foreach (var subItem in item.SubKeys)
+                {
+                    AddVisibleItems(subItem, result);
                 }
             }
         }
@@ -111,6 +241,28 @@ namespace RegViewer.Lib.Panel
         {
             if (sender is not TreeView treeView) return;
 
+            // Shift+↑/↓で選択範囲を拡張
+            if (Keyboard.Modifiers.HasFlag(ModifierKeys.Shift) && (e.Key == Key.Up || e.Key == Key.Down))
+            {
+                HandleShiftArrowKey(e.Key == Key.Up);
+                e.Handled = true;
+                return;
+            }
+
+            // Shiftなし↑/↓で単一選択に戻す
+            if (e.Key == Key.Up || e.Key == Key.Down)
+            {
+                ClearSelection();
+                // TreeViewの標準動作に任せるため、e.Handledは設定しない
+                // SelectedItemChangedイベントで新しい選択が処理される
+                return;
+            }
+
+            if (e.Key == Key.Delete)
+            {
+                MessageBox.Show(string.Join(", ", _selectedItems.Select(x => x.Path)));
+            }
+
             // 文字キーのみを処理
             if ((e.Key >= Key.A && e.Key <= Key.Z) ||
                 (e.Key >= Key.D0 && e.Key <= Key.D9) ||
@@ -158,6 +310,52 @@ namespace RegViewer.Lib.Panel
 
                 e.Handled = true;
             }
+        }
+
+        private void HandleShiftArrowKey(bool isUp)
+        {
+            var allItems = GetAllVisibleItems(TreeView);
+            if (allItems.Count == 0) return;
+
+            // 最初の選択がない場合は、最初のアイテムを選択
+            if (_selectedItems.Count == 0)
+            {
+                var firstItem = allItems[0];
+                _selectedItems.Add(firstItem);
+                firstItem.IsSelected = true;
+                _lastSelectedItem = firstItem;
+                return;
+            }
+
+            // 現在フォーカスのあるアイテム（TreeViewの選択アイテム）を取得
+            var currentItem = TreeView.SelectedItem as KeyItem;
+            if (currentItem == null && _lastSelectedItem != null)
+            {
+                currentItem = _lastSelectedItem;
+            }
+            if (currentItem == null) return;
+
+            int currentIndex = allItems.IndexOf(currentItem);
+            if (currentIndex == -1) return;
+
+            // 移動先のインデックスを計算
+            int targetIndex = isUp ? currentIndex - 1 : currentIndex + 1;
+            if (targetIndex < 0 || targetIndex >= allItems.Count) return;
+
+            var targetItem = allItems[targetIndex];
+
+            // アンカーポイント（選択の起点）を決定
+            if (_lastSelectedItem == null)
+            {
+                _lastSelectedItem = currentItem;
+            }
+
+            // 選択範囲を再計算
+            ClearSelection();
+            SelectRange(_lastSelectedItem, targetItem);
+
+            // TreeViewのフォーカスを移動（スクロールのため）
+            SelectTreeViewItem(TreeView, targetItem);
         }
 
         private char GetCharFromKey(Key key)

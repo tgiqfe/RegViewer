@@ -12,7 +12,8 @@
         Top="{Binding Setting.Top, Mode=TwoWay}"
         Height="{Binding Setting.Height, Mode=TwoWay}"
         Width="{Binding Setting.Width, Mode=TwoWay}"
-        PreviewKeyDown="Window_PreviewKeyDown">
+        PreviewKeyDown="Window_PreviewKeyDown"
+        PreviewKeyUp="Window_PreviewKeyUp">
 
     <Grid>
         <Grid.ColumnDefinitions>

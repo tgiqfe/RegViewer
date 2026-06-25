@@ -9,7 +9,7 @@ namespace RegViewer
     {
         private DispatcherTimer _keyHoldTimer;
         private Key? _currentHeldKey;
-        private const int _keyHoldDelay = 300;
+        private const int _keyHoldDelay = 350;
 
         public MainWindow()
         {
@@ -17,20 +17,43 @@ namespace RegViewer
             this.DataContext = Item.BindingParam;
         }
 
+        /// <summary>
+        /// ウィンドウ全体のキー入力
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void Window_PreviewKeyDown(object sender, System.Windows.Input.KeyEventArgs e)
         {
+            if (e.IsRepeat && _currentHeldKey.HasValue) return;
+
             switch (e.Key)
             {
                 case Key.Escape:
+                    //  アプリケーションを終了するためのキー入力処理
                     _currentHeldKey = e.Key;
                     _keyHoldTimer = new DispatcherTimer();
                     _keyHoldTimer.Interval = TimeSpan.FromMilliseconds(_keyHoldDelay);
                     _keyHoldTimer.Tick += (sender, e) =>
                     {
-                        Application.Current.Shutdown(); 
+                        Application.Current.Shutdown();
+                        _keyHoldTimer?.Stop();
                     };
                     _keyHoldTimer.Start();
                     break;
+            }
+        }
+
+        /// <summary>
+        /// キーが離されたときの処理
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void Window_PreviewKeyUp(object sender, System.Windows.Input.KeyEventArgs e)
+        {
+            if (e.Key == _currentHeldKey)
+            {
+                _keyHoldTimer?.Stop();
+                _currentHeldKey = null;
             }
         }
     }
