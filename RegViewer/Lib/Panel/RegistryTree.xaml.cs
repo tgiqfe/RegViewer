@@ -13,6 +13,8 @@ namespace RegViewer.Lib.Panel
         private DateTime _lastKeyPressTime = DateTime.MinValue;
         private const int SearchTimeoutMs = 1000;
 
+        private KeyItem _selectedKeyItem = null;
+
         public RegistryTree()
         {
             InitializeComponent();
@@ -22,13 +24,40 @@ namespace RegViewer.Lib.Panel
         {
             if (e.NewValue is KeyItem selectedKeyItem)
             {
-                //AddressBar.Text = selectedKeyItem.Path;
+                _selectedKeyItem = selectedKeyItem;
                 Item.BindingParam.AddressBar.Text = selectedKeyItem.Path;
                 foreach (var item in selectedKeyItem.SubKeys)
                 {
                     item.LoadSubKeys();
                 }
             }
+        }
+
+        private void TreeView_PreviewMouseDown(object sender, MouseButtonEventArgs e)
+        {
+            var clickedElement = e.OriginalSource as DependencyObject;
+            if (clickedElement != null)
+            {
+                var treeViewItem = FindParent<TreeViewItem>(clickedElement);
+                if (treeViewItem == null && _selectedKeyItem != null)
+                {
+                    SelectTreeViewItem(TreeView, _selectedKeyItem);
+                    e.Handled = true;
+                }
+            }
+        }
+
+        private T FindParent<T>(DependencyObject child) where T : DependencyObject
+        {
+            DependencyObject parentObject = System.Windows.Media.VisualTreeHelper.GetParent(child);
+
+            if (parentObject == null)
+                return null;
+
+            if (parentObject is T parent)
+                return parent;
+
+            return FindParent<T>(parentObject);
         }
 
         private void TreeView_PreviewMouseWheel(object sender, MouseWheelEventArgs e)
@@ -43,8 +72,8 @@ namespace RegViewer.Lib.Panel
         private void TreeViewItem_Expanded(object sender, RoutedEventArgs e)
         {
             // 実際に展開されたアイテムのみを処理（バブリングを防ぐ/親アイテムの展開イベントを無視）
-            if (e.OriginalSource == sender && 
-                sender is TreeViewItem treeViewItem && 
+            if (e.OriginalSource == sender &&
+                sender is TreeViewItem treeViewItem &&
                 treeViewItem.DataContext is KeyItem expandingKeyItem)
             {
                 if (!treeViewItem.IsSelected)
@@ -53,8 +82,6 @@ namespace RegViewer.Lib.Panel
                 }
             }
         }
-
-        #region TextSearch
 
         private void TreeView_PreviewKeyDown(object sender, KeyEventArgs e)
         {
@@ -142,8 +169,7 @@ namespace RegViewer.Lib.Panel
             foreach (KeyItem rootItem in treeView.ItemsSource)
             {
                 var result = SearchInKeyItem(rootItem);
-                if (result != null)
-                    return result;
+                if (result != null) return result;
             }
 
             return null;
@@ -173,47 +199,46 @@ namespace RegViewer.Lib.Panel
 
         private void SelectTreeViewItem(TreeView treeView, KeyItem item)
         {
-            // TreeViewItemを取得して選択
-            var container = GetTreeViewItem(treeView, item);
-            if (container != null)
+            TreeViewItem getTreeViewItem(ItemsControl container, object item)
             {
-                container.IsSelected = true;
-                container.BringIntoView();
-            }
-        }
-
-        private TreeViewItem GetTreeViewItem(ItemsControl container, object item)
-        {
-            if (container != null)
-            {
-                if (container.DataContext == item)
+                if (container != null)
                 {
-                    return container as TreeViewItem;
-                }
-
-                // すべての子アイテムを確認
-                for (int i = 0; i < container.Items.Count; i++)
-                {
-                    TreeViewItem subContainer = container.ItemContainerGenerator.ContainerFromIndex(i) as TreeViewItem;
-                    if (subContainer != null)
+                    if (container.DataContext == item)
                     {
-                        if (subContainer.DataContext == item)
-                        {
-                            return subContainer;
-                        }
+                        return container as TreeViewItem;
+                    }
 
-                        // 再帰的に子要素を検索
-                        TreeViewItem resultContainer = GetTreeViewItem(subContainer, item);
-                        if (resultContainer != null)
+                    // すべての子アイテムを確認
+                    for (int i = 0; i < container.Items.Count; i++)
+                    {
+                        TreeViewItem subContainer = container.ItemContainerGenerator.ContainerFromIndex(i) as TreeViewItem;
+                        if (subContainer != null)
                         {
-                            return resultContainer;
+                            if (subContainer.DataContext == item)
+                            {
+                                return subContainer;
+                            }
+
+                            // 再帰的に子要素を検索
+                            TreeViewItem resultContainer = getTreeViewItem(subContainer, item);
+                            if (resultContainer != null)
+                            {
+                                return resultContainer;
+                            }
                         }
                     }
                 }
+                return null;
             }
-            return null;
-        }
 
-        #endregion
+            // TreeViewItemを取得して選択
+            var container = getTreeViewItem(treeView, item);
+            if (container != null)
+            {
+                container.IsSelected = true;
+                container.Focus();
+                container.BringIntoView();
+            }
+        }
     }
 }

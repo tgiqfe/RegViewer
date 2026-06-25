@@ -6,16 +6,16 @@
              xmlns:local="clr-namespace:RegViewer.Lib.Panel"
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              mc:Ignorable="d">
-    <DockPanel>
+    <Grid>
+        <TextBox Name="AddressBar"
+                 Padding="25,3,3,3"
+                 VerticalContentAlignment="Center"
+                 Text="{Binding AddressBar.Text, Mode=TwoWay}"/>
         <materialDesign:PackIcon Kind="FolderMoveOutline"
                                  Width="18"
                                  Height="18"
                                  Margin="5"
                                  VerticalAlignment="Center"
                                  DockPanel.Dock="Left"/>
-        <TextBox Name="AddressBar"
-                 Padding="3"
-                 VerticalContentAlignment="Center"
-                 Text="{Binding AddressBar.Text, Mode=TwoWay}"/>
-    </DockPanel>
+    </Grid>
 </UserControl>

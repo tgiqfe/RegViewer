@@ -17,7 +17,8 @@
                       PreviewKeyDown="TreeView_PreviewKeyDown"
                       ScrollViewer.VerticalScrollBarVisibility="Disabled"
                       ScrollViewer.HorizontalScrollBarVisibility="Disabled"
-                      PreviewMouseWheel="TreeView_PreviewMouseWheel">
+                      PreviewMouseWheel="TreeView_PreviewMouseWheel"
+                      PreviewMouseDown="TreeView_PreviewMouseDown">
                 <TreeView.ItemContainerStyle>
                     <Style TargetType="TreeViewItem">
                         <Setter Property="IsExpanded" Value="{Binding IsExpanded, Mode=TwoWay}" />
