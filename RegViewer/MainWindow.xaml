@@ -32,68 +32,9 @@
         </Border>
 
         <Border Grid.Row="1" Grid.Column="0" BorderBrush="Gray" BorderThickness="1">
-            <ScrollViewer Name="TreeScrollViewer" 
-                          VerticalScrollBarVisibility="Auto"
-                          HorizontalScrollBarVisibility="Auto">
-                <StackPanel Orientation="Vertical">
-
-                    <panel:RegistryTree x:Name="Tree_HKCR" KeyItems="{Binding Key_HKCR}" />
-
-                    <panel:RegistryTree x:Name="Tree_HKCU" KeyItems="{Binding Key_HKCU}" />
-
-                    <panel:RegistryTree x:Name="Tree_HKLM" KeyItems="{Binding Key_HKLM}" />
-
-                    <panel:RegistryTree x:Name="Tree_HKU" KeyItems="{Binding Key_HKU}" />
-                    
-                    <panel:RegistryTree x:Name="Tree_HKCC" KeyItems="{Binding Key_HKCC}" />
-
-                        <!--
-                    <TreeView Name="TreeView1" ItemsSource="{Binding Keys1}" BorderThickness="0"
-                              SelectedItemChanged="TreeView_SelectedItemChanged"
-                              PreviewKeyDown="TreeView_PreviewKeyDown"
-                              ScrollViewer.VerticalScrollBarVisibility="Disabled"
-                              ScrollViewer.HorizontalScrollBarVisibility="Disabled"
-                              PreviewMouseWheel="TreeView_PreviewMouseWheel">
-                        <TreeView.ItemContainerStyle>
-                            <Style TargetType="TreeViewItem">
-                                <Setter Property="IsExpanded" Value="{Binding IsExpanded, Mode=TwoWay}" />
-                                <EventSetter Event="Expanded" Handler="TreeViewItem_Expanded" />
-                            </Style>
-                        </TreeView.ItemContainerStyle>
-                        <TreeView.ItemTemplate>
-                            <HierarchicalDataTemplate DataType="{x:Type lib:KeyItem}"
-                                                      ItemsSource="{Binding SubKeys}">
-                                <TextBlock Text="{Binding Name}" FontWeight="Bold" Margin="0,0,5,0"
-                                           FontSize="12"/>
-                            </HierarchicalDataTemplate>
-                        </TreeView.ItemTemplate>
-                    </TreeView>
-
-                    <TreeView Name="TreeView2" ItemsSource="{Binding Keys2}" BorderThickness="0"
-                              SelectedItemChanged="TreeView_SelectedItemChanged"
-                              PreviewKeyDown="TreeView_PreviewKeyDown"
-                              ScrollViewer.VerticalScrollBarVisibility="Disabled"
-                              ScrollViewer.HorizontalScrollBarVisibility="Disabled"
-                              PreviewMouseWheel="TreeView_PreviewMouseWheel">
-                        <TreeView.ItemContainerStyle>
-                            <Style TargetType="TreeViewItem">
-                                <Setter Property="IsExpanded" Value="{Binding IsExpanded, Mode=TwoWay}" />
-                                <EventSetter Event="Expanded" Handler="TreeViewItem_Expanded" />
-                            </Style>
-                        </TreeView.ItemContainerStyle>
-                        <TreeView.ItemTemplate>
-                            <HierarchicalDataTemplate DataType="{x:Type lib:KeyItem}"
-                                                      ItemsSource="{Binding SubKeys}">
-                                <TextBlock Text="{Binding Name}" FontWeight="Bold" Margin="0,0,5,0"
-                                           FontSize="12"/>
-                            </HierarchicalDataTemplate>
-                        </TreeView.ItemTemplate>
-                    </TreeView>
-                    -->
-                </StackPanel>
-            </ScrollViewer>
+            <panel:RegistryTree x:Name="RootKeys" />
         </Border>
-        
+
         <Border Grid.Row="1" Grid.Column="1" BorderBrush="Gray" BorderThickness="1">
             <StackPanel Orientation="Vertical">
                 <Label Content="aaaa" />
@@ -102,7 +43,7 @@
                 <Label Content="aaaa" />
             </StackPanel>
         </Border>
-        
+
         <Label Grid.Row="2" Grid.Column="0" Content="Status: Ready" />
     </Grid>
 </Window>

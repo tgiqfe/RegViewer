@@ -8,29 +8,32 @@
              mc:Ignorable="d"
              x:Name="Root">
     <Grid>
-        <TreeView Name="TreeView1"
-                  ItemsSource="{Binding ElementName=Root, Path=KeyItems}"
-                  BorderThickness="0"
-                  SelectedItemChanged="TreeView_SelectedItemChanged"
-                  PreviewKeyDown="TreeView_PreviewKeyDown"
-                  ScrollViewer.VerticalScrollBarVisibility="Disabled"
-                  ScrollViewer.HorizontalScrollBarVisibility="Disabled"
-                  PreviewMouseWheel="TreeView_PreviewMouseWheel">
-            <TreeView.ItemContainerStyle>
-                <Style TargetType="TreeViewItem">
-                    <Setter Property="IsExpanded" Value="{Binding IsExpanded, Mode=TwoWay}" />
-                    <EventSetter Event="Expanded" Handler="TreeViewItem_Expanded" />
-                </Style>
-            </TreeView.ItemContainerStyle>
-            <TreeView.ItemTemplate>
-                <HierarchicalDataTemplate DataType="{x:Type lib:KeyItem}"
-                                          ItemsSource="{Binding SubKeys}">
-                    <TextBlock Text="{Binding Name}"
-                               FontWeight="Bold"
-                               Margin="0,0,5,0"
-                               FontSize="12"/>
-                </HierarchicalDataTemplate>
-            </TreeView.ItemTemplate>
-        </TreeView>
+        <ScrollViewer Name="TreeScrollViewer"
+                      VerticalScrollBarVisibility="Auto"
+                      HorizontalScrollBarVisibility="Auto">
+            <TreeView ItemsSource="{Binding RootKeys}"
+                      BorderThickness="0"
+                      SelectedItemChanged="TreeView_SelectedItemChanged"
+                      PreviewKeyDown="TreeView_PreviewKeyDown"
+                      ScrollViewer.VerticalScrollBarVisibility="Disabled"
+                      ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                      PreviewMouseWheel="TreeView_PreviewMouseWheel">
+                <TreeView.ItemContainerStyle>
+                    <Style TargetType="TreeViewItem">
+                        <Setter Property="IsExpanded" Value="{Binding IsExpanded, Mode=TwoWay}" />
+                        <EventSetter Event="Expanded" Handler="TreeViewItem_Expanded" />
+                    </Style>
+                </TreeView.ItemContainerStyle>
+                <TreeView.ItemTemplate>
+                    <HierarchicalDataTemplate DataType="{x:Type lib:KeyItem}"
+                                              ItemsSource="{Binding SubKeys}">
+                        <TextBlock Text="{Binding Name}"
+                                   FontWeight="Bold"
+                                   Margin="0,0,5,0"
+                                   FontSize="12"/>
+                    </HierarchicalDataTemplate>
+                </TreeView.ItemTemplate>
+            </TreeView>
+        </ScrollViewer>
     </Grid>
 </UserControl>

@@ -23,19 +23,6 @@ namespace RegViewer.Lib.Panel
         private DateTime _lastKeyPressTime = DateTime.MinValue;
         private const int SearchTimeoutMs = 1000;
 
-        public static readonly DependencyProperty KeyItemsProperty =
-            DependencyProperty.Register(
-                nameof(KeyItems),
-                typeof(ObservableCollection<KeyItem>),
-                typeof(RegistryTree),
-                new PropertyMetadata(null));
-
-        public ObservableCollection<KeyItem> KeyItems
-        {
-            get => (ObservableCollection<KeyItem>)GetValue(KeyItemsProperty);
-            set => SetValue(KeyItemsProperty, value);
-        }
-
         public RegistryTree()
         {
             InitializeComponent();
@@ -50,6 +37,11 @@ namespace RegViewer.Lib.Panel
 
         private void TreeView_PreviewMouseWheel(object sender, MouseWheelEventArgs e)
         {
+            if (TreeScrollViewer != null)
+            {
+                TreeScrollViewer.ScrollToVerticalOffset(TreeScrollViewer.VerticalOffset - e.Delta / 3.0);
+                e.Handled = true;
+            }
         }
 
         private void TreeViewItem_Expanded(object sender, RoutedEventArgs e)
@@ -108,20 +100,6 @@ namespace RegViewer.Lib.Panel
                     }
                 }
 
-
-
-                if (currentItem != null && currentItem.SubKeys != null)
-                {
-                    // 現在選択されている項目の兄弟要素から検索
-                    //foundItem = SearchInSiblings(treeView, currentItem);
-                }
-
-                // 兄弟要素で見つからなければ、ツリー全体から検索
-                if (foundItem == null)
-                {
-                    //foundItem = SearchInTreeView(treeView);
-                }
-
                 // 見つかった項目を選択
                 if (foundItem != null)
                 {
@@ -130,14 +108,6 @@ namespace RegViewer.Lib.Panel
 
                 e.Handled = true;
             }
-        }
-
-
-
-        private KeyItem SearchInSiblings(TreeView treeView, KeyItem currentItem)
-        {
-            // 親の取得が難しいので、ルートから検索する方が確実
-            return null;
         }
 
         private KeyItem SearchInTreeView(TreeView treeView)

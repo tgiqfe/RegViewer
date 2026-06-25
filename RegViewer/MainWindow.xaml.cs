@@ -13,19 +13,15 @@ namespace RegViewer
     /// </summary>
     public partial class MainWindow : Window
     {
-        private string _searchString = "";
-        private DateTime _lastKeyPressTime = DateTime.MinValue;
-        private const int SearchTimeoutMs = 1000;
+        //private string _searchString = "";
+        //private DateTime _lastKeyPressTime = DateTime.MinValue;
+        //private const int SearchTimeoutMs = 1000;
 
         public MainWindow()
         {
             InitializeComponent();
 
             this.DataContext = Item.BindingParam;
-
-
-
-            
         }
 
         private void TreeView_SelectedItemChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
@@ -40,6 +36,7 @@ namespace RegViewer
             }
         }
 
+        /*
         private void TreeView_PreviewMouseWheel(object sender, MouseWheelEventArgs e)
         {
             if (TreeScrollViewer != null)
@@ -218,5 +215,7 @@ namespace RegViewer
         }
 
         #endregion
+
+        */
     }
 }
