@@ -20,6 +20,12 @@ namespace RegViewer.Lib.Panel
             InitializeComponent();
         }
 
+        /// <summary>
+        /// TreeViewの選択が変更されたときに呼び出されるイベントハンドラー
+        /// 選択したアイテムの一つ下の階層のサブキーをロードする
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void TreeView_SelectedItemChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
         {
             if (e.NewValue is KeyItem selectedKeyItem)
@@ -33,6 +39,12 @@ namespace RegViewer.Lib.Panel
             }
         }
 
+        /// <summary>
+        /// TreeViewのPreviewMouseDownイベントハンドラー
+        /// マウスのホイール上下でスクロールするために、TreeViewItem以外の部分をクリックした場合に選択を解除しないようにする
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void TreeView_PreviewMouseDown(object sender, MouseButtonEventArgs e)
         {
             var clickedElement = e.OriginalSource as DependencyObject;
