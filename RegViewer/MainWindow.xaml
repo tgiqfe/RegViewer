@@ -19,17 +19,22 @@
             <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
-            <RowDefinition Height="30" />
+            <RowDefinition Height="25" />
             <RowDefinition Height="*" />
             <RowDefinition Height="30" />
         </Grid.RowDefinitions>
 
+        <panel:RegistryAddressBar Grid.Row="0" Grid.ColumnSpan="2" 
+                                  x:Name="AddressBar" />
+
+        <!--
         <Border Grid.Row="0" Grid.ColumnSpan="2" BorderBrush="Gray" BorderThickness="1">
             <TextBox Name="AddressBar"
                      Text=""
                      VerticalContentAlignment="Center"
                      FontSize="12" />
         </Border>
+        -->
 
         <Border Grid.Row="1" Grid.Column="0" BorderBrush="Gray" BorderThickness="1">
             <panel:RegistryTree x:Name="RootKeys" />

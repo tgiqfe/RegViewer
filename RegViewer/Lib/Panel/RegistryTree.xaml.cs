@@ -23,6 +23,7 @@ namespace RegViewer.Lib.Panel
             if (e.NewValue is KeyItem selectedKeyItem)
             {
                 //AddressBar.Text = selectedKeyItem.Path;
+                Item.BindingParam.AddressBar.Text = selectedKeyItem.Path;
                 foreach (var item in selectedKeyItem.SubKeys)
                 {
                     item.LoadSubKeys();
