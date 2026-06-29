@@ -1,5 +1,6 @@
 ﻿using System.Printing;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 using System.Windows.Input;
 using System.Windows.Threading;
@@ -65,12 +66,20 @@ namespace RegViewer
         /// <param name="e"></param>
         private void GridSplitter_DragCompleted(object sender, DragCompletedEventArgs e)
         {
-            var grid = (sender as FrameworkElement)?.Parent as System.Windows.Controls.Grid;
-            if (grid != null && grid.ColumnDefinitions.Count > 0)
+            var splitter = sender as GridSplitter;
+            if (splitter != null)
             {
-                var width = grid.ColumnDefinitions[0].ActualWidth;
-                Item.BindingParam.Setting.TreeWidth = (int)width;
-                //Item.BindingParam.Setting.Save();
+                var grid = splitter.Parent as System.Windows.Controls.Grid;
+                if (grid != null && grid.ColumnDefinitions.Count > 0)
+                {
+                    var width = grid.ColumnDefinitions[0].ActualWidth;
+                    Item.BindingParam.Setting.TreeWidth = (int)width;
+                }
+                if (grid != null && grid.RowDefinitions.Count > 3)
+                {
+                    var height = grid.RowDefinitions[3].ActualHeight;
+                    Item.BindingParam.Setting.InfoHeight = (int)height;
+                }
             }
         }
     }

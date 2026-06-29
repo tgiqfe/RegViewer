@@ -22,14 +22,18 @@
             <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
-            <RowDefinition Height="25" />
+            <RowDefinition Height="27" />
             <RowDefinition Height="*" />
-            <RowDefinition Height="30" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="{Binding Setting.InfoHeight}" />
         </Grid.RowDefinitions>
 
-        <panel:RegistryAddressBar Grid.Row="0" Grid.ColumnSpan="3" 
-                                  x:Name="AddressBar" />
-
+        <Border Grid.Row="0" Grid.ColumnSpan="3"
+                BorderBrush="Gray" BorderThickness="1"
+                Margin="0,0,0,2">
+            <panel:RegistryAddressBar x:Name="AddressBar" />
+        </Border>
+        
         <Border Grid.Row="1" Grid.Column="0"
                 Name="RegistryTreeBorder"
                 BorderBrush="Gray" BorderThickness="1">
@@ -37,6 +41,7 @@
         </Border>
 
         <GridSplitter Grid.Row="1" Grid.Column="1"
+                      Name="GridSplitter_TreePanel"
                       Width="2"
                       HorizontalAlignment="Stretch"
                       VerticalAlignment="Stretch"
@@ -55,6 +60,18 @@
             </StackPanel>
         </Border>
 
-        <Label Grid.Row="2" Grid.Column="0" Content="Status: Ready" />
+        <GridSplitter Grid.Row="2" Grid.ColumnSpan="3"
+                      Name="GridSplitter_InfoPanel"
+                      Height="2"
+                      HorizontalAlignment="Stretch"
+                      VerticalAlignment="Stretch"
+                      Background="Transparent"
+                      ShowsPreview="False"
+                      DragCompleted="GridSplitter_DragCompleted" />
+
+        <Border Grid.Row="3" Grid.ColumnSpan="3"
+                BorderBrush="Gray" BorderThickness="1">
+            <panel:RegistryKeyInfo x:Name="KeyInfo" />
+        </Border>
     </Grid>
 </Window>

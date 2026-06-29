@@ -46,6 +46,8 @@ namespace RegViewer.Lib.Panel
                     _selectedItems.Add(selectedKeyItem);
                     selectedKeyItem.IsSelected = true;
                     _lastSelectedItem = selectedKeyItem;
+
+                    Item.BindingParam.KeyInformation.GetKeyInformation(selectedKeyItem.Path);
                 }
             }
         }
