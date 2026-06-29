@@ -15,6 +15,8 @@ namespace RegViewer
         public int Width { get; set; }
         public int Height { get; set; }
 
+        public int TreeWidth { get; set; }
+
         const string CONFIG_NAME = "Setting.json";
 
         public static Setting Load()
@@ -35,7 +37,8 @@ namespace RegViewer
                     Left = 300,
                     Top = 300,
                     Width = 800,
-                    Height = 450
+                    Height = 450,
+                    TreeWidth = 300,
                 };
                 setting.Save();
             }

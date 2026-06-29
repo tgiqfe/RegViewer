@@ -1,5 +1,6 @@
 ﻿using System.Printing;
 using System.Windows;
+using System.Windows.Controls.Primitives;
 using System.Windows.Input;
 using System.Windows.Threading;
 
@@ -54,6 +55,22 @@ namespace RegViewer
             {
                 _keyHoldTimer?.Stop();
                 _currentHeldKey = null;
+            }
+        }
+
+        /// <summary>
+        /// GridSplitterのドラッグが完了したときの処理
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void GridSplitter_DragCompleted(object sender, DragCompletedEventArgs e)
+        {
+            var grid = (sender as FrameworkElement)?.Parent as System.Windows.Controls.Grid;
+            if (grid != null && grid.ColumnDefinitions.Count > 0)
+            {
+                var width = grid.ColumnDefinitions[0].ActualWidth;
+                Item.BindingParam.Setting.TreeWidth = (int)width;
+                //Item.BindingParam.Setting.Save();
             }
         }
     }

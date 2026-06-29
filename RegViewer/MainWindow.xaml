@@ -17,6 +17,7 @@
 
     <Grid>
         <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="{Binding Setting.TreeWidth}" MinWidth="100" />
             <ColumnDefinition Width="Auto" />
             <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
@@ -26,14 +27,26 @@
             <RowDefinition Height="30" />
         </Grid.RowDefinitions>
 
-        <panel:RegistryAddressBar Grid.Row="0" Grid.ColumnSpan="2" 
+        <panel:RegistryAddressBar Grid.Row="0" Grid.ColumnSpan="3" 
                                   x:Name="AddressBar" />
 
-        <Border Grid.Row="1" Grid.Column="0" BorderBrush="Gray" BorderThickness="1">
+        <Border Grid.Row="1" Grid.Column="0"
+                Name="RegistryTreeBorder"
+                BorderBrush="Gray" BorderThickness="1">
             <panel:RegistryTree x:Name="RootKeys" />
         </Border>
 
-        <Border Grid.Row="1" Grid.Column="1" BorderBrush="Gray" BorderThickness="1">
+        <GridSplitter Grid.Row="1" Grid.Column="1"
+                      Width="2"
+                      HorizontalAlignment="Stretch"
+                      VerticalAlignment="Stretch"
+                      Background="Transparent"
+                      ShowsPreview="False"
+                      DragCompleted="GridSplitter_DragCompleted" />
+
+        <Border Grid.Row="1" Grid.Column="2"
+                Name="DetailsBorder"
+                BorderBrush="Gray" BorderThickness="1">
             <StackPanel Orientation="Vertical">
                 <Label Content="aaaa" />
                 <Label Content="aaaa" />
