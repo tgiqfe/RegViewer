@@ -1,4 +1,5 @@
-﻿using System.Windows;
+﻿using Microsoft.Win32;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 
@@ -461,5 +462,7 @@ namespace RegViewer.Lib.Panel
                 container.BringIntoView();
             }
         }
+
+
     }
 }

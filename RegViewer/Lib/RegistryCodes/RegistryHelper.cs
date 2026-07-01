@@ -17,8 +17,17 @@ namespace RegViewer.Lib.RegistryCodes
         /// <returns></returns>
         public static RegistryKey GetRegistryKey(string path, bool isCreate = false, bool writable = false)
         {
-            string rootPath = path.Substring(0, path.IndexOf("\\"));
-            string keyPath = path.Substring(path.IndexOf("\\") + 1);
+            string rootPath, keyPath;
+            if (path.Contains("\\"))
+            {
+                rootPath = path.Substring(0, path.IndexOf("\\"));
+                keyPath = path.Substring(path.IndexOf("\\") + 1);
+            }
+            else
+            {
+                rootPath = path;
+                keyPath = "";
+            }
 
             RegistryKey rootKey = rootPath.ToLower() switch
             {
@@ -32,9 +41,17 @@ namespace RegViewer.Lib.RegistryCodes
             if (rootKey == null) return null;
 
             if (isCreate) writable = true;
-            return isCreate ?
-                rootKey.CreateSubKey(keyPath, writable) :
-                rootKey.OpenSubKey(keyPath, writable);
+
+            if (keyPath == "")
+            {
+                return rootKey;
+            }
+            else
+            {
+                return isCreate ?
+                    rootKey.CreateSubKey(keyPath, writable) :
+                    rootKey.OpenSubKey(keyPath, writable);
+            }
         }
 
         /// <summary>

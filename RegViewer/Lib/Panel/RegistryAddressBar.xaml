@@ -10,7 +10,8 @@
         <TextBox Name="AddressBar"
                  Padding="25,3,3,3"
                  VerticalContentAlignment="Center"
-                 Text="{Binding AddressBar.Text, Mode=TwoWay}"/>
+                 Text="{Binding AddressBar.Text, Mode=TwoWay}"
+                 PreviewKeyDown="AddressBar_PreviewKeyDown"/>
         <materialDesign:PackIcon Kind="FolderMoveOutline"
                                  Width="18"
                                  Height="18"

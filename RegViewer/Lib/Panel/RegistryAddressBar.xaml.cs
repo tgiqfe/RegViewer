@@ -13,14 +13,31 @@ using System.Windows.Shapes;
 
 namespace RegViewer.Lib.Panel
 {
-    /// <summary>
-    /// RegistryAddressBar.xaml の相互作用ロジック
-    /// </summary>
     public partial class RegistryAddressBar : UserControl
     {
         public RegistryAddressBar()
         {
             InitializeComponent();
+        }
+
+        private void AddressBar_PreviewKeyDown(object sender, KeyEventArgs e)
+        {
+            switch (e.Key)
+            {
+                case Key.Enter:
+                    //  AddressBarに入力されたパスへ移動
+                    string path = AddressBar.Text;
+                    if (!string.IsNullOrWhiteSpace(path))
+                    {
+                        path = path.Trim();
+                        
+                        var mainWindow = Application.Current.MainWindow as MainWindow;
+                        
+                        
+                    }
+                    e.Handled = true;
+                    break;
+            }
         }
     }
 }
