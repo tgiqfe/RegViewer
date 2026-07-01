@@ -16,7 +16,10 @@ namespace RegViewer
         public int Height { get; set; }
 
         public int TreeWidth { get; set; }
-        public int InfoHeight { get; set; }
+        public int TreeHeight { get; set; }
+        public int InfoWidth { get; set; }
+
+        public bool ViewInheritedAcl { get; set; }
 
         const string CONFIG_NAME = "Setting.json";
 
@@ -40,7 +43,9 @@ namespace RegViewer
                     Width = 800,
                     Height = 450,
                     TreeWidth = 200,
-                    InfoHeight = 120,
+                    TreeHeight = 120,
+                    InfoWidth = 200,
+                    ViewInheritedAcl = false,
                 };
                 setting.Save();
             }

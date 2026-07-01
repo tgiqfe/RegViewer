@@ -4,9 +4,6 @@ using System.Windows.Input;
 
 namespace RegViewer.Lib.Panel
 {
-    /// <summary>
-    /// RegistryTree.xaml の相互作用ロジック
-    /// </summary>
     public partial class RegistryTree : UserControl
     {
         private string _searchString = "";

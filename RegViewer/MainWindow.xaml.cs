@@ -69,7 +69,7 @@ namespace RegViewer
             var splitter = sender as GridSplitter;
             if (splitter != null)
             {
-                var grid = splitter.Parent as System.Windows.Controls.Grid;
+                var grid = splitter.Parent as Grid;
                 if (grid != null && grid.ColumnDefinitions.Count > 0)
                 {
                     var width = grid.ColumnDefinitions[0].ActualWidth;
@@ -78,7 +78,7 @@ namespace RegViewer
                 if (grid != null && grid.RowDefinitions.Count > 3)
                 {
                     var height = grid.RowDefinitions[3].ActualHeight;
-                    Item.BindingParam.Setting.InfoHeight = (int)height;
+                    Item.BindingParam.Setting.TreeHeight = (int)height;
                 }
             }
         }

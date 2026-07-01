@@ -6,20 +6,56 @@
              xmlns:local="clr-namespace:RegViewer.Lib.Panel"
              mc:Ignorable="d">
     <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="Auto" />
-        </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="{Binding Setting.InfoWidth}" MinWidth="100" />
             <ColumnDefinition Width="Auto" />
             <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
 
-        <StackPanel Grid.Row="0" Grid.Column="0" Orientation="Vertical" Margin="5,0">
-            <TextBlock Text="所有者:" />
-            <TextBlock Text="{Binding KeyInformation.Owner}" Name="OwnerTextBlock" />
-            <TextBlock Text="継承:" />
-            <TextBlock Text="{Binding KeyInformation.IsInherited}" Name="IsInheritedTextBlock" />
-        </StackPanel>
+        <Border Grid.Row="1" Grid.Column="0"
+                Name="RegistryTreeBorder"
+                BorderBrush="Gray" BorderThickness="1">
+            <StackPanel Grid.Column="0" Orientation="Vertical" Margin="5,0">
+                <TextBlock Text="所有者:" />
+                <TextBlock Text="{Binding KeyInformation.Owner}" Name="OwnerTextBlock" />
+                <StackPanel Orientation="Horizontal" Margin="0,5,0,0">
+                    <TextBlock Text="上位からの継承: "
+                               VerticalAlignment="Center" />
+                    <TextBlock Text="{Binding KeyInformation.IsInheritedText}"
+                               VerticalAlignment="Center"
+                               FontWeight="Bold" />
+                </StackPanel>
+                <TextBlock Text="" />
+                <CheckBox Name="Button_ViewInheritedToggle"
+                          Content="継承された権限を表示"
+                          IsEnabled="{Binding KeyInformation.IsInherited}"
+                          IsChecked="{Binding Setting.ViewInheritedAcl, Mode=TwoWay}"
+                          Checked="Button_ViewInheritedToggle_Checked"
+                          Unchecked="Button_ViewInheritedToggle_Unchecked"/>
+            </StackPanel>
+        </Border>
+
+        <GridSplitter Grid.Column="1"
+                      Name="GridSplitter_InfoPanel"
+                      Width="2"
+                      HorizontalAlignment="Stretch"
+                      VerticalAlignment="Stretch"
+                      Background="Transparent"
+                      ShowsPreview="False"
+                      DragCompleted="GridSplitter_InfoPanel_DragCompleted" />
+
+        <Grid Grid.Column="2">
+            <DataGrid ItemsSource="{Binding KeyInformation.ACLs}"
+                      AutoGenerateColumns="False"
+                      IsReadOnly="True">
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="アカウント" Binding="{Binding Account}" Width="300"/>
+                    <DataGridTextColumn Header="アクセス権" Binding="{Binding RightsText}" Width="120"/>
+                    <DataGridTextColumn Header="許可" Binding="{Binding AllowType}" Width="50"/>
+                    <DataGridTextColumn Header="配下への継承" Binding="{Binding RecursiveType}" Width="100"/>
+                    <DataGridTextColumn Header="上位からの継承" Binding="{Binding IsInheritedMark}" Width="100"/>
+                </DataGrid.Columns>
+            </DataGrid>
+        </Grid>
     </Grid>
 </UserControl>

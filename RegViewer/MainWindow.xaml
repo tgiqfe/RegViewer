@@ -25,7 +25,7 @@
             <RowDefinition Height="27" />
             <RowDefinition Height="*" />
             <RowDefinition Height="Auto" />
-            <RowDefinition Height="{Binding Setting.InfoHeight}" />
+            <RowDefinition Height="{Binding Setting.InfoHeight}" MinHeight="100"/>
         </Grid.RowDefinitions>
 
         <Border Grid.Row="0" Grid.ColumnSpan="3"
