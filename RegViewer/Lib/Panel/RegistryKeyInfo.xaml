@@ -5,6 +5,14 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:RegViewer.Lib.Panel"
              mc:Ignorable="d">
+    <UserControl.Resources>
+        <Style TargetType="TextBlock">
+            <Setter Property="FontSize" Value="14" />
+        </Style>
+        <Style TargetType="CheckBox">
+            <Setter Property="FontSize" Value="14" />
+        </Style>
+    </UserControl.Resources>
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="{Binding Setting.InfoWidth}" MinWidth="100" />
@@ -17,7 +25,9 @@
                 BorderBrush="Gray" BorderThickness="1">
             <StackPanel Grid.Column="0" Orientation="Vertical" Margin="5,0">
                 <TextBlock Text="所有者:" />
-                <TextBlock Text="{Binding KeyInformation.Owner}" Name="OwnerTextBlock" />
+                <TextBlock Text="{Binding KeyInformation.Owner}"
+                           Name="OwnerTextBlock"
+                           Margin="10,0,0,0"/>
                 <StackPanel Orientation="Horizontal" Margin="0,5,0,0">
                     <TextBlock Text="上位からの継承: "
                                VerticalAlignment="Center" />
@@ -25,9 +35,10 @@
                                VerticalAlignment="Center"
                                FontWeight="Bold" />
                 </StackPanel>
-                <TextBlock Text="" />
                 <CheckBox Name="Button_ViewInheritedToggle"
                           Content="継承された権限を表示"
+                          VerticalContentAlignment="Center"
+                          Margin="0,5,0,0"
                           IsEnabled="{Binding KeyInformation.IsInherited}"
                           IsChecked="{Binding Setting.ViewInheritedAcl, Mode=TwoWay}"
                           Checked="Button_ViewInheritedToggle_Checked"
@@ -52,8 +63,8 @@
                     <DataGridTextColumn Header="アカウント" Binding="{Binding Account}" Width="300"/>
                     <DataGridTextColumn Header="アクセス権" Binding="{Binding RightsText}" Width="120"/>
                     <DataGridTextColumn Header="許可" Binding="{Binding AllowType}" Width="50"/>
-                    <DataGridTextColumn Header="配下への継承" Binding="{Binding RecursiveType}" Width="100"/>
-                    <DataGridTextColumn Header="上位からの継承" Binding="{Binding IsInheritedMark}" Width="100"/>
+                    <DataGridTextColumn Header="適用先" Binding="{Binding RecursiveType}" Width="100"/>
+                    <DataGridTextColumn Header="継承" Binding="{Binding IsInheritedMark}" Width="40"/>
                 </DataGrid.Columns>
             </DataGrid>
         </Grid>

@@ -24,7 +24,7 @@ namespace RegViewer
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void Window_PreviewKeyDown(object sender, System.Windows.Input.KeyEventArgs e)
+        private void Window_PreviewKeyDown(object sender, KeyEventArgs e)
         {
             if (e.IsRepeat && _currentHeldKey.HasValue) return;
 

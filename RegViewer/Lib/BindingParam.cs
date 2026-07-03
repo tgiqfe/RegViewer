@@ -10,6 +10,7 @@ namespace RegViewer.Lib
         public ObservableCollection<KeyItem> RootKeys { get; set; }
         public AddressBar AddressBar { get; set; }
         public KeyInformation KeyInformation { get; set; }
+        public RegistryItems RegistryItems { get; set; }
 
         public BindingParam()
         {
@@ -24,6 +25,7 @@ namespace RegViewer.Lib
             this.RootKeys.Add(new KeyItem(Registry.CurrentConfig));
 
             this.KeyInformation = new();
+            this.RegistryItems = new();
         }
     }
 }

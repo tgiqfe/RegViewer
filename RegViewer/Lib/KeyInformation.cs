@@ -14,6 +14,8 @@ namespace RegViewer.Lib
 {
     internal class KeyInformation : INotifyPropertyChanged
     {
+        #region Parameters
+
         public string Path { get; set; }
         public string Name { get; set; }
 
@@ -59,6 +61,9 @@ namespace RegViewer.Lib
             }
         }
 
+        #endregion
+        #region Inner class
+
         public class ACL
         {
             public string Account { get; set; }
@@ -84,6 +89,9 @@ namespace RegViewer.Lib
             public string IsInheritedMark { get => IsInherited ? "●" : ""; }
         }
 
+        #endregion
+
+        /*
         public void GetKeyInformation(string path)
         {
             this.Path = path;
@@ -101,6 +109,7 @@ namespace RegViewer.Lib
                     List<ACL> aclList = new();
                     foreach (RegistryAccessRule rule in rules)
                     {
+                        if (rule.IsInherited && !Item.BindingParam.Setting.ViewInheritedAcl) continue;
                         aclList.Add(new ACL
                         {
                             Account = rule.IdentityReference.Value,
@@ -117,6 +126,47 @@ namespace RegViewer.Lib
             }
             catch
             {
+                this.Owner = null;
+                this.IsInherited = null;
+                this.ACLs = null;
+            }
+        }
+        */
+
+        public void GetKeyInformation(RegistryKey key)
+        {
+            try
+            {
+                this.Path = key.Name;
+                this.Name = System.IO.Path.GetFileName(key.Name);
+
+                var security = key.GetAccessControl();
+                this.Owner = security.GetOwner(typeof(NTAccount)).ToString();
+                this.IsInherited = !security.AreAccessRulesProtected;
+                var rules = security.GetAccessRules(true, true, typeof(NTAccount));
+                var acls = new ObservableCollection<ACL>();
+
+                List<ACL> aclList = new();
+                foreach (RegistryAccessRule rule in rules)
+                {
+                    if (rule.IsInherited && !Item.BindingParam.Setting.ViewInheritedAcl) continue;
+                    aclList.Add(new ACL
+                    {
+                        Account = rule.IdentityReference.Value,
+                        Rights = rule.RegistryRights,
+                        IsAllow = rule.AccessControlType == AccessControlType.Allow,
+                        IsRecurse =
+                            rule.InheritanceFlags.HasFlag(InheritanceFlags.ContainerInherit) ||
+                            rule.InheritanceFlags.HasFlag(InheritanceFlags.ObjectInherit),
+                        IsInherited = rule.IsInherited,
+                    });
+                }
+                this.ACLs = new ObservableCollection<ACL>(aclList);
+            }
+            catch
+            {
+                this.Path = null;
+                this.Name = null;
                 this.Owner = null;
                 this.IsInherited = null;
                 this.ACLs = null;

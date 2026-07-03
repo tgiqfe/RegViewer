@@ -1,4 +1,5 @@
 ﻿using Microsoft.Win32;
+using RegViewer.Lib.RegistryCodes;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -45,7 +46,14 @@ namespace RegViewer.Lib.Panel
                     selectedKeyItem.IsSelected = true;
                     _lastSelectedItem = selectedKeyItem;
 
-                    Item.BindingParam.KeyInformation.GetKeyInformation(selectedKeyItem.Path);
+                    using(var regKey = RegistryHelper.GetRegistryKey(selectedKeyItem.Path))
+                    {
+                        //  キー内のレジストリ値を取得して表示する
+                        Item.BindingParam.RegistryItems.GetRegistryItems(regKey);
+
+                        //  キーのアクセス権情報を取得して表示する
+                        Item.BindingParam.KeyInformation.GetKeyInformation(regKey);
+                    }
                 }
             }
         }

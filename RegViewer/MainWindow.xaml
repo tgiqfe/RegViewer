@@ -6,6 +6,7 @@
         xmlns:local="clr-namespace:RegViewer"
         xmlns:lib="clr-namespace:RegViewer.Lib"
         xmlns:panel="clr-namespace:RegViewer.Lib.Panel"
+        xmlns:converter="clr-namespace:RegViewer.Lib.Converter"
         mc:Ignorable="d"
         Title="MainWindow"
         Left="{Binding Setting.Left, Mode=TwoWay}"
@@ -14,7 +15,10 @@
         Width="{Binding Setting.Width, Mode=TwoWay}"
         PreviewKeyDown="Window_PreviewKeyDown"
         PreviewKeyUp="Window_PreviewKeyUp">
-
+    <Window.Resources>
+        <converter:BootToVisibilityConverter x:Key="BootToVisibilityConverter" />
+    </Window.Resources>
+        
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="{Binding Setting.TreeWidth}" MinWidth="100" />
@@ -22,7 +26,7 @@
             <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
-            <RowDefinition Height="27" />
+            <RowDefinition Height="28" />
             <RowDefinition Height="*" />
             <RowDefinition Height="Auto" />
             <RowDefinition Height="{Binding Setting.InfoHeight}" MinHeight="100"/>
@@ -30,7 +34,7 @@
 
         <Border Grid.Row="0" Grid.ColumnSpan="3"
                 BorderBrush="Gray" BorderThickness="1"
-                Margin="0,0,0,2">
+                Margin="0,0,0,3">
             <panel:RegistryAddressBar x:Name="AddressBar" />
         </Border>
         
@@ -42,7 +46,7 @@
 
         <GridSplitter Grid.Row="1" Grid.Column="1"
                       Name="GridSplitter_TreePanel"
-                      Width="2"
+                      Width="3"
                       HorizontalAlignment="Stretch"
                       VerticalAlignment="Stretch"
                       Background="Transparent"
@@ -52,17 +56,12 @@
         <Border Grid.Row="1" Grid.Column="2"
                 Name="DetailsBorder"
                 BorderBrush="Gray" BorderThickness="1">
-            <StackPanel Orientation="Vertical">
-                <Label Content="aaaa" />
-                <Label Content="aaaa" />
-                <Label Content="aaaa" />
-                <Label Content="aaaa" />
-            </StackPanel>
+            <panel:RegistryParameters x:Name="RegParams" />
         </Border>
 
         <GridSplitter Grid.Row="2" Grid.ColumnSpan="3"
                       Name="GridSplitter_InfoPanel"
-                      Height="2"
+                      Height="3"
                       HorizontalAlignment="Stretch"
                       VerticalAlignment="Stretch"
                       Background="Transparent"
