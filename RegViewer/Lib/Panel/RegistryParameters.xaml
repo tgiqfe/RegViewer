@@ -9,7 +9,9 @@
     <Grid>
         <DataGrid ItemsSource="{Binding RegistryItems.Items}"
                   AutoGenerateColumns="False"
-                  IsReadOnly="True">
+                  IsReadOnly="True"
+                  HorizontalGridLinesBrush="LightSlateGray"
+                  VerticalGridLinesBrush="Gainsboro">
             <DataGrid.Columns>
                 <DataGridTextColumn Header="名前" Binding="{Binding NameText}" Width="120" />
                 <DataGridTextColumn Header="種類" Binding="{Binding ValueKindText}" Width="100" />

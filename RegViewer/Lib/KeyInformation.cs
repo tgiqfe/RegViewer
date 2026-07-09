@@ -91,86 +91,33 @@ namespace RegViewer.Lib
 
         #endregion
 
-        /*
-        public void GetKeyInformation(string path)
-        {
-            this.Path = path;
-            this.Name = System.IO.Path.GetFileName(path);
-            try
-            {
-                using (var regkey = RegistryHelper.GetRegistryKey(path, isCreate: false, writable: false))
-                {
-                    var security = regkey.GetAccessControl();
-                    this.Owner = security.GetOwner(typeof(NTAccount)).ToString();
-                    this.IsInherited = !security.AreAccessRulesProtected;
-                    var rules = security.GetAccessRules(true, true, typeof(NTAccount));
-                    var acls = new ObservableCollection<ACL>();
-
-                    List<ACL> aclList = new();
-                    foreach (RegistryAccessRule rule in rules)
-                    {
-                        if (rule.IsInherited && !Item.BindingParam.Setting.ViewInheritedAcl) continue;
-                        aclList.Add(new ACL
-                        {
-                            Account = rule.IdentityReference.Value,
-                            Rights = rule.RegistryRights,
-                            IsAllow = rule.AccessControlType == AccessControlType.Allow,
-                            IsRecurse =
-                                rule.InheritanceFlags.HasFlag(InheritanceFlags.ContainerInherit) ||
-                                rule.InheritanceFlags.HasFlag(InheritanceFlags.ObjectInherit),
-                            IsInherited = rule.IsInherited,
-                        });
-                    }
-                    this.ACLs = new ObservableCollection<ACL>(aclList);
-                }
-            }
-            catch
-            {
-                this.Owner = null;
-                this.IsInherited = null;
-                this.ACLs = null;
-            }
-        }
-        */
-
         public void GetKeyInformation(RegistryKey key)
         {
-            try
+            this.Path = key.Name;
+            this.Name = System.IO.Path.GetFileName(key.Name);
+
+            var security = key.GetAccessControl();
+            this.Owner = security.GetOwner(typeof(NTAccount)).ToString();
+            this.IsInherited = !security.AreAccessRulesProtected;
+            var rules = security.GetAccessRules(true, true, typeof(NTAccount));
+            var acls = new ObservableCollection<ACL>();
+
+            List<ACL> aclList = new();
+            foreach (RegistryAccessRule rule in rules)
             {
-                this.Path = key.Name;
-                this.Name = System.IO.Path.GetFileName(key.Name);
-
-                var security = key.GetAccessControl();
-                this.Owner = security.GetOwner(typeof(NTAccount)).ToString();
-                this.IsInherited = !security.AreAccessRulesProtected;
-                var rules = security.GetAccessRules(true, true, typeof(NTAccount));
-                var acls = new ObservableCollection<ACL>();
-
-                List<ACL> aclList = new();
-                foreach (RegistryAccessRule rule in rules)
+                if (rule.IsInherited && !Item.BindingParam.Setting.ViewInheritedAcl) continue;
+                aclList.Add(new ACL
                 {
-                    if (rule.IsInherited && !Item.BindingParam.Setting.ViewInheritedAcl) continue;
-                    aclList.Add(new ACL
-                    {
-                        Account = rule.IdentityReference.Value,
-                        Rights = rule.RegistryRights,
-                        IsAllow = rule.AccessControlType == AccessControlType.Allow,
-                        IsRecurse =
-                            rule.InheritanceFlags.HasFlag(InheritanceFlags.ContainerInherit) ||
-                            rule.InheritanceFlags.HasFlag(InheritanceFlags.ObjectInherit),
-                        IsInherited = rule.IsInherited,
-                    });
-                }
-                this.ACLs = new ObservableCollection<ACL>(aclList);
+                    Account = rule.IdentityReference.Value,
+                    Rights = rule.RegistryRights,
+                    IsAllow = rule.AccessControlType == AccessControlType.Allow,
+                    IsRecurse =
+                        rule.InheritanceFlags.HasFlag(InheritanceFlags.ContainerInherit) ||
+                        rule.InheritanceFlags.HasFlag(InheritanceFlags.ObjectInherit),
+                    IsInherited = rule.IsInherited,
+                });
             }
-            catch
-            {
-                this.Path = null;
-                this.Name = null;
-                this.Owner = null;
-                this.IsInherited = null;
-                this.ACLs = null;
-            }
+            this.ACLs = new ObservableCollection<ACL>(aclList);
         }
 
         public void UpdateAclList(bool viewInherited)
@@ -198,6 +145,15 @@ namespace RegViewer.Lib
                 }
                 this.ACLs = new ObservableCollection<ACL>(aclList);
             }
+        }
+
+        public void Clear()
+        {
+            this.Path = null;
+            this.Name = null;
+            this.Owner = null;
+            this.IsInherited = null;
+            this.ACLs = null;
         }
 
         #region Inotify change

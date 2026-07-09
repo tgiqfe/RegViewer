@@ -37,7 +37,19 @@
                         <TextBlock Text="{Binding Name}"
                                        FontWeight="Bold"
                                        Margin="0,0,5,0"
-                                       FontSize="12"/>
+                                       FontSize="12">
+                            <TextBlock.ContextMenu>
+                                <ContextMenu>
+                                    <MenuItem Header="追加(キー)" />
+                                    <MenuItem Header="追加(値)" IsEnabled="False"/>
+                                    <Separator />
+                                    <MenuItem Header="削除" />
+                                    <Separator />
+                                    <MenuItem Header="コピー" />
+                                    <MenuItem Header="貼り付け" />
+                                </ContextMenu>
+                            </TextBlock.ContextMenu>
+                        </TextBlock>
                     </HierarchicalDataTemplate>
                 </TreeView.ItemTemplate>
             </TreeView>

@@ -83,34 +83,6 @@ namespace RegViewer.Lib
 
         #endregion
 
-        /*
-        public void GetRegistryItems(string path)
-        {
-            List<RegistryItem> list = new();
-            using (var key = RegistryHelper.GetRegistryKey(path))
-            {
-                if (key != null)
-                {
-                    foreach (var valueName in key.GetValueNames())
-                    {
-                        var valueKind = key.GetValueKind(valueName);
-                        var item = new RegistryItem
-                        {
-                            Name = valueName,
-                            ValueKind = valueKind,
-                            Value = valueKind == RegistryValueKind.ExpandString ?
-                                key.GetValue(valueName, "", RegistryValueOptions.DoNotExpandEnvironmentNames) :
-                                key.GetValue(valueName),
-                        };
-                        list.Add(item);
-                    }
-                }
-            }
-
-            this.Items = new ObservableCollection<RegistryItem>(list);
-        }
-        */
-
         public void GetRegistryItems(RegistryKey key)
         {
             List<RegistryItem> list = new();
@@ -143,6 +115,11 @@ namespace RegViewer.Lib
             }
 
             this.Items = new ObservableCollection<RegistryItem>(list.OrderBy(x => x.Name));
+        }
+
+        public void Clear()
+        {
+            this.Items = new ObservableCollection<RegistryItem>();
         }
 
 

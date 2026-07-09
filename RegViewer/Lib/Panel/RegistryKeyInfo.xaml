@@ -58,7 +58,9 @@
         <Grid Grid.Column="2">
             <DataGrid ItemsSource="{Binding KeyInformation.ACLs}"
                       AutoGenerateColumns="False"
-                      IsReadOnly="True">
+                      IsReadOnly="True"
+                      HorizontalGridLinesBrush="LightSlateGray"
+                      VerticalGridLinesBrush="Gainsboro">
                 <DataGrid.Columns>
                     <DataGridTextColumn Header="アカウント" Binding="{Binding Account}" Width="300"/>
                     <DataGridTextColumn Header="アクセス権" Binding="{Binding RightsText}" Width="120"/>
