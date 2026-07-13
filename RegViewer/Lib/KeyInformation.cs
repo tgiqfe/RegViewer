@@ -61,6 +61,17 @@ namespace RegViewer.Lib
             }
         }
 
+        private bool _readable = false;
+        public bool Readable
+        {
+            get => _readable;
+            set
+            {
+                _readable = value;
+                OnPropertyChanged();
+            }
+        }
+
         #endregion
         #region Inner class
 

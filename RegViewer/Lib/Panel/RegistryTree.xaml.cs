@@ -47,22 +47,31 @@ namespace RegViewer.Lib.Panel
                     selectedKeyItem.IsSelected = true;
                     _lastSelectedItem = selectedKeyItem;
 
-                    try
+                    if (selectedKeyItem.Readable)
                     {
-                        using (var regKey = RegistryHelper.GetRegistryKey(selectedKeyItem.Path))
+                        try
                         {
-                            //  キー内のレジストリ値を取得して表示する
-                            Item.BindingParam.RegistryItems.GetRegistryItems(regKey);
+                            using (var regKey = RegistryHelper.GetRegistryKey(selectedKeyItem.Path))
+                            {
+                                //  キー内のレジストリ値を取得して表示する
+                                Item.BindingParam.RegistryItems.GetRegistryItems(regKey);
 
-                            //  キーのアクセス権情報を取得して表示する
-                            Item.BindingParam.KeyInformation.GetKeyInformation(regKey);
+                                //  キーのアクセス権情報を取得して表示する
+                                Item.BindingParam.KeyInformation.GetKeyInformation(regKey);
+                            }
+                        }
+                        catch (SecurityException)
+                        {
+                            Console.WriteLine("SecurityException occurred while accessing the registry key.");
                         }
                     }
-                    catch (SecurityException ex)
+                    else
                     {
                         Item.BindingParam.RegistryItems.Clear();
                         Item.BindingParam.KeyInformation.Clear();
                     }
+
+                    Item.BindingParam.KeyInformation.Readable = selectedKeyItem.Readable;
                 }
             }
         }

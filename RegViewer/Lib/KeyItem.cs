@@ -70,6 +70,20 @@ namespace RegViewer.Lib
             }
         }
 
+        private bool? _readable = null;
+        public bool Readable
+        {
+            get => _readable ?? false;
+            set
+            {
+                if (_readable != value)
+                {
+                    _readable = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
         #endregion
         #region Constructor
 
@@ -126,6 +140,9 @@ namespace RegViewer.Lib
                         {
                             this.SubKeys = new ObservableCollection<KeyItem>();
                         }
+
+                        //  サブキーを取得できるということは、Readableであると判断
+                        this.Readable = true;
                     }
                 }
                 catch (SecurityException e)

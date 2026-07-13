@@ -4,6 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:RegViewer.Lib.Panel"
+             xmlns:converter="clr-namespace:RegViewer.Lib.Converter"
              mc:Ignorable="d">
     <UserControl.Resources>
         <Style TargetType="TextBlock">
@@ -12,6 +13,8 @@
         <Style TargetType="CheckBox">
             <Setter Property="FontSize" Value="14" />
         </Style>
+        <converter:BootToVisibilityConverter x:Key="BootToVisibilityConverter" />
+        <converter:BootToVisibilityNegativeConverter x:Key="BootToVisibilityNegativeConverter" />
     </UserControl.Resources>
     <Grid>
         <Grid.ColumnDefinitions>
@@ -70,5 +73,17 @@
                 </DataGrid.Columns>
             </DataGrid>
         </Grid>
+
+        <Border Grid.Column="2"
+                Background="AliceBlue"
+                Width="240" Height="80"
+                HorizontalAlignment="Center" VerticalAlignment="Center"
+                Margin="10"
+                Visibility="{Binding KeyInformation.Readable, Converter={StaticResource BootToVisibilityNegativeConverter}}">
+            <TextBlock Text="アクセス不可"
+                   FontSize="20"
+                   Background="AliceBlue"
+                   HorizontalAlignment="Center" VerticalAlignment="Center" />
+        </Border>
     </Grid>
 </UserControl>
