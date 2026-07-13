@@ -489,6 +489,33 @@ namespace RegViewer.Lib.Panel
             }
         }
 
+        #region Context menu event handlers
+
+        private void MenuItem_Click(object sender, RoutedEventArgs e)
+        {
+            var item = sender as MenuItem;
+            var keyItem = item?.DataContext as KeyItem;
+            switch (item.Name)
+            {
+                case "AddKeyMenuItem":
+                    break;
+                case "AddValueMenuItem":
+                    break;
+                case "DeleteMenuItem":
+                    break;
+                case "RenameMenuItem":
+                    break;
+                case "CopyMenuItem":
+                    break;
+                case "PasteMenuItem":
+                    break;
+                default:
+                    break;
+            }
+        }
+
+        #endregion
+
 
     }
 }

@@ -45,13 +45,26 @@
                                        FontSize="12">
                             <TextBlock.ContextMenu>
                                 <ContextMenu>
-                                    <MenuItem Header="追加(キー)" IsEnabled="{Binding Readable}"/>
-                                    <MenuItem Header="追加(値)" IsEnabled="{Binding Readable}"/>
+                                    <MenuItem Name="AddKeyMenuItem" Header="追加(キー)"
+                                              IsEnabled="{Binding Readable}"
+                                              Click="MenuItem_Click" />
+                                    <MenuItem Name="AddValueMenuItem" Header="追加(値)"
+                                              IsEnabled="{Binding Readable}"
+                                              Click="MenuItem_Click" />
                                     <Separator />
-                                    <MenuItem Header="削除" IsEnabled="{Binding Readable}"/>
+                                    <MenuItem Name="DeleteMenuItem" Header="削除"
+                                              IsEnabled="{Binding Readable}"
+                                              Click="MenuItem_Click" />
+                                    <MenuItem Name="RenameMenuItem" Header="名前の変更"
+                                              IsEnabled="{Binding Readable}"
+                                              Click="MenuItem_Click" />
                                     <Separator />
-                                    <MenuItem Header="コピー" />
-                                    <MenuItem Header="貼り付け" IsEnabled="{Binding Readable}"/>
+                                    <MenuItem Name="CopyMenuItem" Header="コピー"
+                                              IsEnabled="True"
+                                              Click="MenuItem_Click" />
+                                    <MenuItem Name="PasteMenuItem" Header="貼り付け"
+                                              IsEnabled="{Binding Readable}"
+                                              Click="MenuItem_Click"/>
                                 </ContextMenu>
                             </TextBlock.ContextMenu>
                         </TextBlock>
