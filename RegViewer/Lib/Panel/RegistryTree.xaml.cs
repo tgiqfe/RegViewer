@@ -17,6 +17,8 @@ namespace RegViewer.Lib.Panel
         private readonly List<KeyItem> _selectedItems = new List<KeyItem>();
         private KeyItem _lastSelectedItem = null;
 
+        private ItemEditWindow _itemEditWindow = null;
+
         public RegistryTree()
         {
             InitializeComponent();
@@ -493,11 +495,20 @@ namespace RegViewer.Lib.Panel
 
         private void MenuItem_Click(object sender, RoutedEventArgs e)
         {
+            if (Item.IsViewEditWindow) return;
+
             var item = sender as MenuItem;
             var keyItem = item?.DataContext as KeyItem;
             switch (item.Name)
             {
                 case "AddKeyMenuItem":
+                    _itemEditWindow = new ItemEditWindow(keyItem);
+                    _itemEditWindow.Owner = Application.Current.MainWindow;
+                    _itemEditWindow.Action = ItemEditWindow.EditAction.Add;
+                    _itemEditWindow.Target = ItemEditWindow.EditTarget.Key;
+                    _itemEditWindow.Show();
+                    _itemEditWindow.NewInput_Key.Focus();
+                    Item.IsViewEditWindow = true;
                     break;
                 case "AddValueMenuItem":
                     break;

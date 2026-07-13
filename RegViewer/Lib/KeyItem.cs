@@ -113,7 +113,7 @@ namespace RegViewer.Lib
 
         public void LoadSubKeys()
         {
-            if (SubKeys == null)
+            if (this.SubKeys == null)
             {
                 try
                 {
@@ -150,6 +150,17 @@ namespace RegViewer.Lib
                     Console.WriteLine($"SecurityException: {e.Message}");
                     this.SubKeys = new ObservableCollection<KeyItem>();
                 }
+            }
+        }
+
+        public void RenewSubKeys()
+        {
+            this.SubKeys = null;
+            LoadSubKeys();
+
+            foreach (var item in this.SubKeys)
+            {
+                item.LoadSubKeys();
             }
         }
 
