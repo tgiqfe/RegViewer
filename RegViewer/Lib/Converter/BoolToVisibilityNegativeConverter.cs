@@ -4,7 +4,7 @@ using System.Windows.Data;
 
 namespace RegViewer.Lib.Converter
 {
-    internal class BootToVisibilityNegativeConverter : IValueConverter
+    internal class BoolToVisibilityNegativeConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {

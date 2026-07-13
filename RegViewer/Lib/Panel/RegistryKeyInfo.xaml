@@ -13,8 +13,8 @@
         <Style TargetType="CheckBox">
             <Setter Property="FontSize" Value="14" />
         </Style>
-        <converter:BootToVisibilityConverter x:Key="BootToVisibilityConverter" />
-        <converter:BootToVisibilityNegativeConverter x:Key="BootToVisibilityNegativeConverter" />
+        <converter:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter" />
+        <converter:BoolToVisibilityNegativeConverter x:Key="BoolToVisibilityNegativeConverter" />
     </UserControl.Resources>
     <Grid>
         <Grid.ColumnDefinitions>
@@ -79,7 +79,7 @@
                 Width="240" Height="80"
                 HorizontalAlignment="Center" VerticalAlignment="Center"
                 Margin="10"
-                Visibility="{Binding KeyInformation.Readable, Converter={StaticResource BootToVisibilityNegativeConverter}}">
+                Visibility="{Binding KeyInformation.Readable, Converter={StaticResource BoolToVisibilityNegativeConverter}}">
             <TextBlock Text="アクセス不可"
                    FontSize="20"
                    Background="AliceBlue"

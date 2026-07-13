@@ -15,9 +15,6 @@
         Width="{Binding Setting.Width, Mode=TwoWay}"
         PreviewKeyDown="Window_PreviewKeyDown"
         PreviewKeyUp="Window_PreviewKeyUp">
-    <Window.Resources>
-        <converter:BootToVisibilityConverter x:Key="BootToVisibilityConverter" />
-    </Window.Resources>
         
     <Grid>
         <Grid.ColumnDefinitions>

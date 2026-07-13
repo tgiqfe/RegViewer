@@ -4,8 +4,13 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:RegViewer.Lib.Panel"
+             xmlns:converter="clr-namespace:RegViewer.Lib.Converter"
              xmlns:lib="clr-namespace:RegViewer.Lib"
              mc:Ignorable="d">
+    <UserControl.Resources>
+        <converter:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter" />
+        <converter:BoolToVisibilityNegativeConverter x:Key="BoolToVisibilityNegativeConverter" />
+    </UserControl.Resources>
     <Grid>
         <ScrollViewer Name="TreeScrollViewer"
                       VerticalScrollBarVisibility="Auto"
@@ -40,13 +45,13 @@
                                        FontSize="12">
                             <TextBlock.ContextMenu>
                                 <ContextMenu>
-                                    <MenuItem Header="追加(キー)" />
-                                    <MenuItem Header="追加(値)" IsEnabled="False"/>
+                                    <MenuItem Header="追加(キー)" IsEnabled="{Binding Readable}"/>
+                                    <MenuItem Header="追加(値)" IsEnabled="{Binding Readable}"/>
                                     <Separator />
-                                    <MenuItem Header="削除" />
+                                    <MenuItem Header="削除" IsEnabled="{Binding Readable}"/>
                                     <Separator />
                                     <MenuItem Header="コピー" />
-                                    <MenuItem Header="貼り付け" />
+                                    <MenuItem Header="貼り付け" IsEnabled="{Binding Readable}"/>
                                 </ContextMenu>
                             </TextBlock.ContextMenu>
                         </TextBlock>
