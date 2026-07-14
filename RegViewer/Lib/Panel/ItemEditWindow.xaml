@@ -74,6 +74,7 @@
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
 
@@ -106,8 +107,13 @@
                 <TextBox Grid.Row="1" Grid.Column="2"
                          Name="NewInput_Key"/>
             </Grid>
-            
-            <StackPanel Grid.Row="2" Orientation="Horizontal"
+
+            <TextBlock Grid.Row="2" Grid.ColumnSpan="3"
+                       Name="EditErrorMessage"
+                       Foreground="Red"
+                       VerticalAlignment="Bottom" />
+
+            <StackPanel Grid.Row="3" Orientation="Horizontal"
                         HorizontalAlignment="Center"
                         VerticalAlignment="Bottom"
                         Margin="-5">

@@ -25,23 +25,20 @@ namespace RegViewer.Lib.Panel
 
         public enum EditAction
         {
-            Add,
-            Delete,
-            Rename,
-            Copy,
-            Paste,
+            AddKey,
+            AddValue,
+            DeleteKey,
+            DeleteValue,
+            RenameKey,
+            RenameValue,
+            CopyKey,
+            CopyValue,
+            PasteKey,
+            PasteValue,
         }
 
-        public enum EditTarget
-        {
-            Key,
-            Name,
-            Value,
-            Type,
-        }
 
         public EditAction Action { get; set; }
-        public EditTarget Target { get; set; }
 
         public ItemEditWindow()
         {
@@ -77,6 +74,7 @@ namespace RegViewer.Lib.Panel
                     e.Handled = true;
                     break;
                 case Key.Enter:
+                    ButtonOK_Click(sender, e);
                     break;
             }
         }
@@ -87,33 +85,8 @@ namespace RegViewer.Lib.Panel
             {
                 switch (this.Action)
                 {
-                    case EditAction.Add:
-                        string newKeyName = Path.Combine(this.KeyPath, NewInput_Key.Text);
-
-                        bool isKeyExists = false;
-                        using (var regKey = RegistryHelper.GetRegistryKey(newKeyName, false, false))
-                        {
-                            if(regKey != null)
-                            {
-                                isKeyExists = true;
-                            }
-                        }
-                        if (isKeyExists)
-                        {
-                            MessageBox.Show("キーが既に存在します", "Registry edit error", MessageBoxButton.OK, MessageBoxImage.Warning);
-                            this.Close();
-                            Item.IsViewEditWindow = false;
-                            return;
-                        }
-
-                        //  Create the new key
-                        using (var regKey = RegistryHelper.GetRegistryKey(newKeyName, true, true))
-                        {
-                        }
-                        this.KeyItem.RenewSubKeys();
-
-                        this.Close();
-                        Item.IsViewEditWindow = false;
+                    case EditAction.AddKey:
+                        AddKeyAction();
                         break;
                 }
             }
@@ -125,6 +98,34 @@ namespace RegViewer.Lib.Panel
 
         private void ButtonCancel_Click(object sender, RoutedEventArgs e)
         {
+            this.Close();
+            Item.IsViewEditWindow = false;
+        }
+
+        private void AddKeyAction()
+        {
+            string newKeyName = Path.Combine(this.KeyPath, NewInput_Key.Text);
+
+            bool isKeyExists = false;
+            using (var regKey = RegistryHelper.GetRegistryKey(newKeyName, false, false))
+            {
+                if (regKey != null)
+                {
+                    isKeyExists = true;
+                }
+            }
+            if (isKeyExists)
+            {
+                EditErrorMessage.Text = "キーは既に存在します。";
+                return;
+            }
+
+            //  Create the new key
+            using (var regKey = RegistryHelper.GetRegistryKey(newKeyName, true, true))
+            {
+            }
+            this.KeyItem.RenewSubKeys();
+
             this.Close();
             Item.IsViewEditWindow = false;
         }

@@ -504,8 +504,7 @@ namespace RegViewer.Lib.Panel
                 case "AddKeyMenuItem":
                     _itemEditWindow = new ItemEditWindow(keyItem);
                     _itemEditWindow.Owner = Application.Current.MainWindow;
-                    _itemEditWindow.Action = ItemEditWindow.EditAction.Add;
-                    _itemEditWindow.Target = ItemEditWindow.EditTarget.Key;
+                    _itemEditWindow.Action = ItemEditWindow.EditAction.AddKey;
                     _itemEditWindow.Show();
                     _itemEditWindow.NewInput_Key.Focus();
                     Item.IsViewEditWindow = true;
