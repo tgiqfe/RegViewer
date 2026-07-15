@@ -82,7 +82,7 @@
                        Text="追加(キー)"
                        FontWeight="Bold" />
 
-            <Grid Grid.Row="1" Name="AddKeyWindow">
+            <Grid Grid.Row="1" Name="AddKeyWindow" Visibility="Hidden">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto" />
                     <RowDefinition Height="Auto" />
@@ -106,6 +106,57 @@
                            Text=":"/>
                 <TextBox Grid.Row="1" Grid.Column="2"
                          Name="NewInput_Key"/>
+            </Grid>
+
+            <Grid Grid.Row="1" Name="AddValueWindow" Visibility="Hidden">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+
+                <TextBlock Grid.Row="0" Grid.Column="0"
+                           Text="親キー" />
+                <TextBlock Grid.Row="0" Grid.Column="1"
+                           Text=":"/>
+                <TextBlock Grid.Row="0" Grid.Column="2"
+                           Text="{Binding KeyInformation.Path}" />
+
+                <TextBlock Grid.Row="1" Grid.Column="0"
+                           Text="新しい値" />
+                <TextBlock Grid.Row="1" Grid.Column="1"
+                           Text=":"/>
+                <TextBox Grid.Row="1" Grid.Column="2"
+                         Name="NewInput_Name"/>
+
+                <TextBlock Grid.Row="2" Grid.Column="0"
+                           Text="新しい値の種類" />
+                <TextBlock Grid.Row="2" Grid.Column="1"
+                           Text=":"/>
+                <ComboBox Grid.Row="2" Grid.Column="2"
+                          Name="ComboBox_ValueType"
+                          SelectedIndex="0">
+                    <ComboBoxItem Content="REG_SZ"/>
+                    <ComboBoxItem Content="REG_BINARY" />
+                    <ComboBoxItem Content="REG_DWORD" />
+                    <ComboBoxItem Content="REG_QWORD" />
+                    <ComboBoxItem Content="REG_MULTI_SZ" />
+                    <ComboBoxItem Content="REG_EXPAND_SZ" />
+                </ComboBox>
+
+                <TextBlock Grid.Row="3" Grid.Column="0"
+                           Text="データ" />
+                <TextBlock Grid.Row="3" Grid.Column="1"
+                           Text=":"/>
+                <TextBox Grid.Row="3" Grid.Column="2"
+                         Name="NewInput_Data"
+                         Height="36"/>
             </Grid>
 
             <TextBlock Grid.Row="2" Grid.ColumnSpan="3"

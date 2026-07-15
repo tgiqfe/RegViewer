@@ -40,11 +40,6 @@ namespace RegViewer.Lib.Panel
 
         public EditAction Action { get; set; }
 
-        public ItemEditWindow()
-        {
-            this.DataContext = Item.BindingParam;
-        }
-
         public ItemEditWindow(KeyItem keyItem)
         {
             this.DataContext = Item.BindingParam;

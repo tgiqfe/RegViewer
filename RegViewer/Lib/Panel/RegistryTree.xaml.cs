@@ -506,10 +506,18 @@ namespace RegViewer.Lib.Panel
                     _itemEditWindow.Owner = Application.Current.MainWindow;
                     _itemEditWindow.Action = ItemEditWindow.EditAction.AddKey;
                     _itemEditWindow.Show();
+                    _itemEditWindow.AddKeyWindow.Visibility = Visibility.Visible;
                     _itemEditWindow.NewInput_Key.Focus();
                     Item.IsViewEditWindow = true;
                     break;
                 case "AddValueMenuItem":
+                    _itemEditWindow = new ItemEditWindow(keyItem);
+                    _itemEditWindow.Owner = Application.Current.MainWindow;
+                    _itemEditWindow.Action = ItemEditWindow.EditAction.AddValue;
+                    _itemEditWindow.Show();
+                    _itemEditWindow.AddValueWindow.Visibility = Visibility.Visible;
+                    _itemEditWindow.NewInput_Name.Focus();
+                    Item.IsViewEditWindow = true;
                     break;
                 case "DeleteMenuItem":
                     break;
