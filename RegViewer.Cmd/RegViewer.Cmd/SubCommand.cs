@@ -3,7 +3,6 @@
     internal enum SubCommand
     {
         List,
-        KeyList,
         Get,
         Set,
         Delete,
