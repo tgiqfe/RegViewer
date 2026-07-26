@@ -16,6 +16,8 @@ namespace RegViewer.Cmd
         public string ValueData { get; private set; }
         public bool IsDefaultValue { get; private set; }
         public RegistryValueKind ValueKind { get; private set; }
+        public bool IsKey { get; private set; }
+        public bool IsForce { get; private set; }
 
         public List<string> TextOptions { get; private set; } = new();
 
@@ -63,7 +65,11 @@ namespace RegViewer.Cmd
                         break;
                     case "/f":
                     case "-f":
-
+                        this.IsForce = true;
+                        break;
+                    case "/k":
+                    case "-k":
+                        this.IsKey = true;
                         break;
                     default:
                         this.TextOptions.Add(args[i]);
