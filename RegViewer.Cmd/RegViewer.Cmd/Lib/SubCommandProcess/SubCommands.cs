@@ -11,11 +11,13 @@ namespace RegViewer.Cmd.Lib.SubCommandProcess
     {
         protected virtual void SetupParameter(ArgsParam aParam) { }
 
+        protected virtual bool CheckParameter() { return false; }
+
         public virtual void Run() { }
 
-        public static SubCommands GetInstance(string subCommand, ArgsParam aParam)
+        public static SubCommands GetInstance(ArgsParam aParam)
         {
-            string simpleClassName = char.ToUpper(subCommand[0]) + subCommand.Substring(1).ToLower() + "Process";
+            string simpleClassName = aParam.SubCommand.ToString() + "Process";
             string fullClassName = $"RegViewer.Cmd.Lib.SubCommandProcess.{simpleClassName}";
 
             Type type = Type.GetType(fullClassName);
@@ -23,7 +25,8 @@ namespace RegViewer.Cmd.Lib.SubCommandProcess
             {
                 SubCommands instance = Activator.CreateInstance(type) as SubCommands;
                 instance.SetupParameter(aParam);
-                return instance;
+                var ret = instance.CheckParameter();
+                return ret ? instance : null;
             }
             return null;
         }
